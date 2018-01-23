@@ -3,28 +3,28 @@
 
 % Input - subjectName: A string to identify the subject.
 
-function [deltaPowerPlotH,colorNames,meanEyeOpenPowerList,...
+function [PlotH,colorNames,meanEyeOpenPowerList,...
           meanEyeClosedPowerList,calibrationPowerList, ...
           trialTypeList1D,powerVsTimeList,deltaPowerVsTimeList,deltaPowerVsTimeList_valid,...
           deltaPowerVsTimeList_invalid,deltaPowerVsTimeList_constant,...
           timeVals,typeNameList]...
           = biofeedbackAnalysis_DeltaPlot(subjectName,folderName,...
-                           displayResultsFlag,deltaPowerPlotH)
+                           displayResultsFlag,PlotH)
                        
 
 if ~exist('subjectName','var');   subjectName='';                       end
 if ~exist('folderName','var');    folderName='';                        end
 if ~exist('displayResultsFlag','var');  displayResultsFlag=1;           end
-if ~exist('analysisPlotHandles','var'); deltaPowerPlotH=[];         end
+if ~exist('PlotH','var'); PlotH=[];         end
 
 if isempty(folderName)
     pathStr = fileparts(pwd);
     folderName = fullfile(pathStr,'Data',subjectName);
 end
-if isempty(deltaPowerPlotH)-
+if isempty(PlotH)
 %     analysisPlotHandles.powerVsTrial        = subplot(2,2,1);
 %     analysisPlotHandles.diffPowerVsTrial    = subplot(2,2,3);
-    deltaPowerPlotH.powerVsTime         = subplot(2,2,2);
+    plotH_deltaPower         = subplot(1,1,1);
 %     analysisPlotHandles.barPlot             = subplot(2,2,4);
     
 %     analysisPlotHandles.powerVsTrial = subplot('Position',[0.05 0.3 0.4 0.2]);
@@ -32,12 +32,14 @@ if isempty(deltaPowerPlotH)-
 %     analysisPlotHandles.powerVsTime = subplot('Position',[0.55 0.3 0.4 0.2]);
 %     analysisPlotHandles.barPlot = subplot('Position',[0.55 0.05 0.4 0.2]);
     
-% else
+else
     % Clear all plots
 %     cla(analysisPlotHandles.powerVsTrial);
 %     cla(analysisPlotHandles.diffPowerVsTrial);
 %     cla(analysisPlotHandles.powerVsTime);
 %     cla(analysisPlotHandles.barPlot);
+    % Unpack the handle to get the plot handle
+    plotH_deltaPower = PlotH.deltaPower;
 end
 
 colorNames = 'rgb';
@@ -119,7 +121,7 @@ else
 %         plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k');
         
 %         hold(analysisPlotHandles.diffPowerVsTrial,'on');
-        hold(deltaPowerPlotH,'on');
+%         hold(PlotH,'on');
 %         hold(analysisPlotHandles.barPlot,'on');
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -146,7 +148,9 @@ else
                 
                 % Power versus time
 %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                plot(deltaPowerPlotH,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                plot(plotH_deltaPower,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                hold(plotH_deltaPower,'on');
+                % Update the axis names
                 
                 % Bar Plot
 %                 bar(analysisPlotHandles.barPlot,i,mean(deltaPower),colorNames(i));
