@@ -19,6 +19,7 @@ for i=1:numSubjects
     xlabel(analysisPlotHandles.diffPowerVsTrial,'TrialNo');
     ylabel(analysisPlotHandles.diffPowerVsTrial,'\DeltaPower(dB)');
 %     title(['Subject',num2str(i)]);
+    % legend([h1 h2 h3],'','','','Location','Best')
     title(analysisPlotHandles.powerVsTime,['Subject',num2str(i)]);
     xlabel(analysisPlotHandles.powerVsTime,'Time(sec)');
     ylabel(analysisPlotHandles.powerVsTime,'\DeltaPower(dB)');

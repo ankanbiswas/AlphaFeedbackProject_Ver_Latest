@@ -24,17 +24,27 @@ h2 = h';
 h3 = h2(:);
 
 for i=1:numSubjects
-    subInd = i;
+    subInd = i;     
     disp(subInd);
-    plotH.deltaPower = h3(i); 
+    plotH.deltaPowerVsTime = h3(i); 
 %     h= figure(i);
 %     set(h, 'Visible', 'on'); % Control visibility of the figure
     
-    [analysisPlotHandles,colorNames,meanEyeOpenPowerList(i,:),...
+    [plotH,colorNames,meanEyeOpenPowerList(i,:),...
     meanEyeClosedPowerList(i,:),calibrationPowerList(i,:),...
     trialTypeList1D(i,:),powerVsTimeList(i,:,:),deltaPowerVsTimeList(i,:,:),...
     deltaPowerVsTimeList_valid(i,:,:),deltaPowerVsTimeList_invalid(i,:,:), ...
     deltaPowerVsTimeList_constant(i,:,:),timeVals,typeNameList] ...
         = biofeedbackAnalysis_DeltaPlot(subjectNames{subInd},'',1,plotH);
+    flag;
+    % legend([h1 h2 h3],'','','','Location','Best')
+    title(plotH.deltaPowerVsTime,['Subject',num2str(i)]);
+    if numSubjects <= 6 || subInd >= 19
+        xlabel(plotH.deltaPowerVsTime,'Time(sec)');
+    end
+    
+    if  subInd == 1 || subInd == 7 || subInd == 13 || subInd == 19
+        ylabel(plotH.deltaPowerVsTime,'\DeltaPower(dB)');
+    end
     disp('one subject data analysis completed');
 end

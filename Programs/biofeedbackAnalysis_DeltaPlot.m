@@ -24,7 +24,7 @@ end
 if isempty(PlotH)
 %     analysisPlotHandles.powerVsTrial        = subplot(2,2,1);
 %     analysisPlotHandles.diffPowerVsTrial    = subplot(2,2,3);
-    plotH_deltaPower         = subplot(1,1,1);
+    plotH_deltaPowerVsTime         = subplot(1,1,1);
 %     analysisPlotHandles.barPlot             = subplot(2,2,4);
     
 %     analysisPlotHandles.powerVsTrial = subplot('Position',[0.05 0.3 0.4 0.2]);
@@ -39,7 +39,7 @@ else
 %     cla(analysisPlotHandles.powerVsTime);
 %     cla(analysisPlotHandles.barPlot);
     % Unpack the handle to get the plot handle
-    plotH_deltaPower = PlotH.deltaPower;
+    plotH_deltaPowerVsTime = PlotH.deltaPowerVsTime;
 end
 
 colorNames = 'rgb';
@@ -148,8 +148,22 @@ else
                 
                 % Power versus time
 %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                plot(plotH_deltaPower,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                hold(plotH_deltaPower,'on');
+               
+                switch i
+                    case 1
+                        disp('Trialtype: Valid');
+                        deltaPowerVsTimeList_valid = deltaPowerVsTimeList(trialPos,:);                      
+                    case 2
+                        disp('Traialtype: Invalid');
+                        deltaPowerVsTimeList_invalid = deltaPowerVsTimeList(trialPos,:);
+                    case 3
+                        disp('Trailtype: Constant');
+                        deltaPowerVsTimeList_constant = deltaPowerVsTimeList(trialPos,:);
+                    otherwise 
+                end
+                      
+                plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                hold(plotH_deltaPowerVsTime,'on');
                 % Update the axis names
                 
                 % Bar Plot

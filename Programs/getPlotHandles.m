@@ -4,7 +4,7 @@ if ~exist('numRows','var');           numRows=10;                       end
 if ~exist('numCols','var');           numCols=10;                       end
 if ~exist('gridPos','var');           gridPos=[0.06 0.06 0.9 0.9];      end
 if ~exist('gapX','var');              gapX=0.03;                       end
-if ~exist('gapY','var');              gapY=gapX;                        end
+if ~exist('gapY','var');              gapY=0.08;                        end
 if ~exist('removeLabels','var');      removeLabels=2;                   end
 
 width = (gridPos(3) - (numCols-1)*gapX)/numCols;
