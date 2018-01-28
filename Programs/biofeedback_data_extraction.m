@@ -5,7 +5,7 @@
 % Duration of trial  = 50 sec
 
 % trialtypes: Valid: 1, Invalid: 2, Constant: 3;
-
+ 
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
                 'KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL', ...
                 'PK','PB','PM','SKH','AD'}';
