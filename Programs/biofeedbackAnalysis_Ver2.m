@@ -13,6 +13,9 @@ if isempty(folderName)
     folderName = fullfile(pathStr,'Data',subjectName);
 end
 if isempty(analysisPlotHandles)
+    
+    % chnged this to have all the figured positioned accordingly in one
+    % figure itslef from the latewr one where it was one the lower half.
     analysisPlotHandles.powerVsTrial = subplot(2,2,1);
     analysisPlotHandles.diffPowerVsTrial = subplot(2,2,3);
     analysisPlotHandles.powerVsTime = subplot(2,2,2);
@@ -49,7 +52,7 @@ else
     sessionNumList = [];
     trialNumList   = [];
     for i=1:max(sessionNumListTMP)
-        sessionPos     = find(sessionNumListTMP==i);
+        sessionPos     = find(sessionNumListTMP==i); % trails within current session 
         sessionNumList = cat(2,sessionNumList,sessionNumListTMP(sessionPos));
         trialNumList   = cat(2,trialNumList,sort(trialNumListTMP(sessionPos)));
     end
@@ -93,6 +96,9 @@ else
         titleStr='';
         
         hold(analysisPlotHandles.powerVsTrial,'on');
+        
+        % Power versus Trial without any specific trial type indication:
+        
         errorbar(analysisPlotHandles.powerVsTrial,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o');
         errorbar(analysisPlotHandles.powerVsTrial,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V');
         plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k');

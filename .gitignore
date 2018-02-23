@@ -1,2 +1,5 @@
 #Ignore matlab mat files 
 *.mat
+*.fig
+*.db
+Used Common toolboxes/

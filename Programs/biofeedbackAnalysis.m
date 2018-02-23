@@ -1,7 +1,8 @@
+function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPowerList,calibrationPowerList,trialTypeList1D,powerVsTimeList,timeVals,typeNameList] = biofeedbackAnalysis(subjectName,folderName,displayResultsFlag,analysisPlotHandles)
+
 % This program is used to analysize the results of the alpha feedback project.
 % Input - subjectName: A string to identify the subject.
 
-function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPowerList,calibrationPowerList,trialTypeList1D,powerVsTimeList,timeVals,typeNameList] = biofeedbackAnalysis(subjectName,folderName,displayResultsFlag,analysisPlotHandles)
 
 if ~exist('subjectName','var');   subjectName='';                       end
 if ~exist('folderName','var');    folderName='';                        end
@@ -13,10 +14,10 @@ if isempty(folderName)
     folderName = fullfile(pathStr,'Data',subjectName);
 end
 if isempty(analysisPlotHandles)
-    analysisPlotHandles.powerVsTrial = subplot('Position',[0.05 0.3 0.4 0.2]);
-    analysisPlotHandles.diffPowerVsTrial = subplot('Position',[0.05 0.05 0.4 0.2]);
-    analysisPlotHandles.powerVsTime = subplot('Position',[0.55 0.3 0.4 0.2]);
-    analysisPlotHandles.barPlot = subplot('Position',[0.55 0.05 0.4 0.2]);
+    analysisPlotHandles.powerVsTrial        = subplot('Position',[0.05 0.3 0.4 0.2]);
+    analysisPlotHandles.diffPowerVsTrial    = subplot('Position',[0.05 0.05 0.4 0.2]);
+    analysisPlotHandles.powerVsTime         = subplot('Position',[0.55 0.3 0.4 0.2]);
+    analysisPlotHandles.barPlot             = subplot('Position',[0.55 0.05 0.4 0.2]);
 else
     % Clear all plots
     cla(analysisPlotHandles.powerVsTrial);
@@ -25,10 +26,10 @@ else
     cla(analysisPlotHandles.barPlot);
 end
 
-colorNames = 'rgb';
-typeNameList{1}='Valid';
-typeNameList{2}='Invalid';
-typeNameList{3}='Constant';
+colorNames      = 'rgb';
+typeNameList{1} ='Valid';
+typeNameList{2} ='Invalid';
+typeNameList{3} ='Constant';
 
 % Get session and trial list in increasing order
 [nextSessionNum,nextTrialNum,sessionNumListTMP,trialNumListTMP] = getExperimentProgress(subjectName,folderName);

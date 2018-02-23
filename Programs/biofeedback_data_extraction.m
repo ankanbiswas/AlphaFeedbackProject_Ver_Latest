@@ -1,5 +1,6 @@
 % Main aim of the code is to extract meaningful data from the collected
 % data from the subjects
+% % Currently extracts out only alphaPowerVsTIme and plots them
 
 % total no of trials = 60 (5*12)
 % Duration of trial  = 50 sec
@@ -9,6 +10,7 @@
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
                 'KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL', ...
                 'PK','PB','PM','SKH','AD'}';
+            
 numSubjects = 24; % no of subjects for which analysis would be carried out
 
 % Change the subplots in the figure accroding to the numsubjects

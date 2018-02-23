@@ -1,12 +1,12 @@
-subjectNames{1}='ABa';
-subjectNames{2}='AJ';
-subjectNames{3}='DB';
-subjectNames{4}='DD';
-subjectNames{5}='HS';
-subjectNames{6}='SB';
-subjectNames{7}='SG';
-subjectNames{8}='SS';
-subjectNames{9}='SSH';
+subjectNames{1}='ABA';
+% subjectNames{2}='AJ';
+% subjectNames{3}='DB';
+% subjectNames{4}='DD';
+% subjectNames{5}='HS';
+% subjectNames{6}='SB';
+% subjectNames{7}='SG';
+% subjectNames{8}='SS';
+% subjectNames{9}='SSH';
 
 
 numSubjects=length(subjectNames);

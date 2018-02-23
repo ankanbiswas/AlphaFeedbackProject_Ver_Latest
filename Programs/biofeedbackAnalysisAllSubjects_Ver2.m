@@ -1,9 +1,10 @@
-
 % Creating cell containing list of all the subjects 
 % Analysing total of 24 subjects out of 25 subjects 
 % One subject didn't show any alpha activity
 
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS','KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL','PK','PB','PM','SKH','AD'};
+% subjectNames = {'ABA'};
+
 numSubjects=length(subjectNames);
 startTrialPos = input('Input the start trial position, Default value 13 \n'); % change accordingly
 if isempty(startTrialPos) % Check startTrialPos User Input
@@ -56,7 +57,7 @@ for j=1:3
     meanAllPowerVsTime{j} = mean(meanPowerVsTime,1);
     semAllPowerVsTime{j}  = std(meanPowerVsTime,[],1)/sqrt(numSubjects);
 %     plot(analysisPlotHandles.powerVsTime,meanAllPowerVsTime{j},'color',colorNames(j));
-    shadedErrorBar(timeVals,meanAllPowerVsTime{j},semAllPowerVsTime{j},colorNames(j),1);
+    shadedErrorBar(timeVals,meanAllPowerVsTime{j},semAllPowerVsTime{j},'lineprops',colorNames(j),'transparent',1);
 %     errorbar(analysisPlotHandles.powerVsTime,1:50,meanAllPowerVsTime{j},semAllPowerVsTime{j},'color',colorNames(j));
 
 end

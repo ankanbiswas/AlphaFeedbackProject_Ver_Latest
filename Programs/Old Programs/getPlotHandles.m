@@ -1,10 +1,12 @@
 function [plotHandles,gridPos,plotPos] = getPlotHandles(numRows,numCols,gridPos,gapX,gapY,removeLabels)
-
+% changed this slidely for the positions value on 19th feb to suite our
+% plot reqirements @AB
+    
 if ~exist('numRows','var');           numRows=10;                       end
 if ~exist('numCols','var');           numCols=10;                       end
-if ~exist('gridPos','var');           gridPos=[0.1 0.1 0.85 0.55];      end
-if ~exist('gapX','var');              gapX=0.005;                       end
-if ~exist('gapY','var');              gapY=gapX;                        end
+if ~exist('gridPos','var');           gridPos=[0.06 0.06 0.9 0.86];    end
+if ~exist('gapX','var');              gapX=0.03;                        end
+if ~exist('gapY','var');              gapY=0.06;                        end % changed this recently
 if ~exist('removeLabels','var');      removeLabels=1;                   end
 
 width = (gridPos(3) - (numCols-1)*gapX)/numCols;
