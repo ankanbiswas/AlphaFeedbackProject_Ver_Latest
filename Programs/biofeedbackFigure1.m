@@ -4,8 +4,11 @@ function biofeedbackFigure1(subjectName,folderName)
     % Input:
         % Subject name as string
         % foldername (optional)
-    clf
-    if ~exist('subjectName','var'); subjectName = 'ABA'; end
+     
+    randomfigurenumber = 100+randi(100); 
+    figure(randomfigurenumber);
+    
+    if ~exist('subjectName','var'); subjectName = 'PB'; end
     if ~exist('folderName','var');  folderName  = '';    end
     
     fontsize = 10;
@@ -15,7 +18,7 @@ function biofeedbackFigure1(subjectName,folderName)
         folderName  = fullfile(pathStr,'Data',subjectName);
     end
     
-    hFigure1          = figure(1); % Creating 
+    hFigure1          = gcf; % Creating 
     
 %     set(gcf,'Visible', 'off'); 
     
@@ -70,7 +73,7 @@ function biofeedbackFigure1(subjectName,folderName)
 %%%     SessionNumber   = input('Input the Session Number, Default value 2 \n');
     if ~exist('SessionNumber','var'),  SessionNumber   = 2;     end    
 %%%     trialNumber     = input('Input the trial Number, Default value 13 \n'); % change accordingly
-    if ~exist('trialNumber','var'),    trialNumber     = 1;     end
+    if ~exist('trialNumber','var'),    trialNumber     = 4;     end
     
     calibrationData     = load(fullfile(folderName,[subjectName 'CalibrationProcessedData' 'Session' num2str(SessionNumber) '.mat']));
     analysisData        = load(fullfile(folderName,[subjectName 'ProcessedData' 'Session' num2str(SessionNumber) 'Trial' num2str(trialNumber) '.mat']));
@@ -145,7 +148,7 @@ function biofeedbackFigure1(subjectName,folderName)
     ylabel(analysisPlotHandles.barPlot,'\DeltaPower(dB)','fontsize',fontsize,'fontweight','bold');   
     
     title(hExperimentFlow,['Subject: ', subjectName]);
-%     disp('one subject data analysis completed');
+    disp('one subject data analysis completed');
     
     
 end

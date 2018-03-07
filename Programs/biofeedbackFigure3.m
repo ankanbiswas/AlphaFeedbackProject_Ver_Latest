@@ -7,7 +7,7 @@
 % Duration of trial  = 50 sec
 
 % trialtypes: Valid: 1, Invalid: 2, Constant: 3;
-
+figure(100)
 fontsize = 10;
 
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
