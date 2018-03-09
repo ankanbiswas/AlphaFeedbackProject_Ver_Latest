@@ -105,9 +105,11 @@ else
         
         % Power versus Trial without any specific trial type indication:
         
-        errorbar(analysisPlotHandles.powerVsTrial,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o');
-        errorbar(analysisPlotHandles.powerVsTrial,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V');
+        trialno = 1:50;
+        errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
+%         errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
         plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k');
+        shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
         
 %         hold(analysisPlotHandles.diffPowerVsTrial,'on');
         hold(analysisPlotHandles.powerVsTime,'on');
@@ -122,8 +124,8 @@ else
             
             if ~isempty(trialPos)
                 % Power versus Trial
-                errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
-                errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
+%                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
+%                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
                 
                 % Change in Power versus Trial, separated by trialType
                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
