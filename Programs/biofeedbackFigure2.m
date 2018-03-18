@@ -3,12 +3,14 @@ function biofeedbackFigure2
     % Function to generate figure1
     % Input:
             % Subject name as string
-            % foldername (optional)
-    
+            % Foldername (optional)
+     
     %%%% Creating figure and axes first:
+    
     hFigure1          = figure(2); % Creating figure
     clf
-    %     set(gcf,'Visible', 'off');
+    %   set(gcf,'Visible', 'off');
+    
     fontsize = 10;
     hRawPowerVsTrials                       = subplot(1,3,1,'Parent',hFigure1);
     title('Raw Power Vs Trials (All Subjects)');
@@ -58,31 +60,6 @@ function biofeedbackFigure2
     end
     hold(hRawPowerVsTrials,'off');
     % What we need now is meanEyeOpenPowerList,meanEyeClosedPowerList & calibrationPowerList
-    % All are of size 24*60:
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    % All are of size 24*60:       
+       
 end
