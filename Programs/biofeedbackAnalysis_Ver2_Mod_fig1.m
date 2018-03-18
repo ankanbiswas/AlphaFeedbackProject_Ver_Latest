@@ -105,11 +105,11 @@ else
         
         % Power versus Trial without any specific trial type indication:
         
-        trialno = 1:50;
+        trialno = 1:60;
         errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
-%         errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
+        errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
         plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k');
-        shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
+%         shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
         
 %         hold(analysisPlotHandles.diffPowerVsTrial,'on');
         hold(analysisPlotHandles.powerVsTime,'on');
