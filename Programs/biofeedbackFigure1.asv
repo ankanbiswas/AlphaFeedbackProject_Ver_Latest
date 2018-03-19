@@ -89,7 +89,7 @@ function biofeedbackFigure1(subjectName,folderName)
     timeValsTF  = analysisData.timeValsTF ;
     
     %%%%% 2nd plot 
-    pcolor(hFreqVsTime,timeValsTF,freqVals,freqVsTimevsDeltaPower);  shading(hFreqVsTime,'interp'); % timevasl on row; freqval on column
+    pcolor(hFreqVsTime,timeValsTF(,freqVals,freqVsTimevsDeltaPower);  shading(hFreqVsTime,'interp'); % timevasl on row; freqval on column
     colormap(hFreqVsTime,'jet'); cBar = colorbar(hFreqVsTime);
 
 %     set(hFreqVsTime,'fontsize',fontsize,'fontweight','bold');
