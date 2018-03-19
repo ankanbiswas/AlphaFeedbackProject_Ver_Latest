@@ -75,6 +75,7 @@ else
     semEyeOpenPowerList    = []; % sem of alpha power during Eye Open condition
     meanEyeClosedPowerList = []; % Mean alpha power during Eye Closed condition
     semEyeClosedPowerList  = []; % sem of alpha power during Eye Closed condition
+    deltaPowerVsTimeList   = [];
     
     for i=1:numTotalTrials
         calibrationData = load(fullfile(folderName,[subjectName 'CalibrationProcessedData' 'Session' num2str(sessionNumList(i)) '.mat']));
@@ -82,6 +83,8 @@ else
         powerVsTimeTMP  = log10(mean(analysisData.tfData(analysisData.alphaPos,:),1));
         
         meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
+        deltaPowerVsTimeTMP = powerVsTimeTMP - repmat(meanCalibrationPower,1,50);
+        
         meanEyeOpenPower     = mean(powerVsTimeTMP(calibrationData.timePosCalibration));
         semEyeOpenPower      = std(powerVsTimeTMP(calibrationData.timePosCalibration))/sqrt(length(calibrationData.timePosCalibration));
         meanEyeClosedPower   = mean(powerVsTimeTMP(analysisData.timePosAnalysis));
@@ -89,6 +92,7 @@ else
         
         calibrationPowerList   = cat(2,calibrationPowerList,meanCalibrationPower);
         powerVsTimeList        = cat(1,powerVsTimeList,powerVsTimeTMP);
+        deltaPowerVsTimeList   = cat(1,deltaPowerVsTimeList,deltaPowerVsTimeTMP);
         meanEyeOpenPowerList   = cat(2,meanEyeOpenPowerList,meanEyeOpenPower);
         semEyeOpenPowerList    = cat(2,semEyeOpenPowerList,semEyeOpenPower);
         meanEyeClosedPowerList = cat(2,meanEyeClosedPowerList,meanEyeClosedPower);
@@ -128,17 +132,20 @@ else
 %                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
                 
                 % Change in Power versus Trial, separated by trialType
-                deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
+%                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
+                deltaPower = deltaPowerVsTimeList(trialPos,:);
+                mean_deltaPower = mean(deltaPower,1);
+                EX_mean_deltaPower = mean_deltaPower(20:45);
 %                 errorbar(analysisPlotHandles.diffPowerVsTrial,deltaPower,semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V');
                 
                 % Power versus time
-                
-                plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                tempmeanPower = mean(deltaPower,1);
+                plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF(6:end),tempmeanPower(6:end),'color',colorNames(i));
                 
                 % Bar Plot
-                bar(analysisPlotHandles.barPlot,i,mean(deltaPower),colorNames(i));
-                errorbar(analysisPlotHandles.barPlot,i,mean(deltaPower),std(deltaPower)/sqrt(length(deltaPower)),'color',colorNames(i));
-                disp(mean(deltaPower));
+                bar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),colorNames(i));
+                errorbar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),std(EX_mean_deltaPower)/sqrt(length(EX_mean_deltaPower)),'color',colorNames(i));
+                disp(mean(EX_mean_deltaPower));
             end
         end
         title(analysisPlotHandles.powerVsTrial,titleStr);
