@@ -1,3 +1,4 @@
+
 function biofeedbackFigure1(subjectName,folderName)
     
     % Function to generate figure1

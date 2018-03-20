@@ -1,7 +1,7 @@
 % Slope analysis of deltapowerVsTime for all the 24 subjects
 % SLope analysyed for time 20 to 40 seconds of the experiment duration
 
-function slopeAnalysis_deltaSlopeVsSlopeInvalid(hdeltaSlopeVsSlopeInvalid,fontsize)
+function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,fontsize)
 % Initialization steps.
 % clc;        % Clear the command window
 % close all;  % Close all figures 

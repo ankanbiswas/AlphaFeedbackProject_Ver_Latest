@@ -12,6 +12,7 @@ if isempty(folderName)
     pathStr = fileparts(pwd);
     folderName = fullfile(pathStr,'Data',subjectName);
 end
+
 if isempty(analysisPlotHandles)
     
     % chnged this to have all the figured positioned accordingly in one
@@ -135,7 +136,7 @@ else
 %                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
                 deltaPower = deltaPowerVsTimeList(trialPos,:);
                 mean_deltaPower = mean(deltaPower,1);
-                EX_mean_deltaPower = mean_deltaPower(20:45);
+                EX_mean_deltaPower = mean_deltaPower(20:50);
 %                 errorbar(analysisPlotHandles.diffPowerVsTrial,deltaPower,semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V');
                 
                 % Power versus time

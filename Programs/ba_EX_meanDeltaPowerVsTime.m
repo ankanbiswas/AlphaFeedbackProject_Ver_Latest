@@ -154,17 +154,17 @@ else
                         disp('Trialtype: Valid');
                         deltaPowerVsTimeList_valid      = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_valid = mean(deltaPowerVsTimeList_valid,1);
-                        EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(20:40);
+                        EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(20:45);
                     case 2
                         disp('Traialtype: Invalid');
                         deltaPowerVsTimeList_invalid      = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_invalid = mean(deltaPowerVsTimeList_invalid,1);
-                        EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(20:40);
+                        EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(20:45);
                     case 3
                         disp('Trailtype: Constant');
                         deltaPowerVsTimeList_constant = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_constant = mean(deltaPowerVsTimeList_constant,1);
-                        EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(20:40);
+                        EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(20:45);
 %                     otherwise 
                 end
                       
