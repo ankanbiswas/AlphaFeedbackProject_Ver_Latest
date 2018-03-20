@@ -12,10 +12,11 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                            displayResultsFlag,PlotH)
                        
 
-if ~exist('subjectName','var');   subjectName='';                       end
-if ~exist('folderName','var');    folderName='';                        end
-if ~exist('displayResultsFlag','var');  displayResultsFlag=1;           end
-if ~exist('PlotH','var'); PlotH=[];                                     end
+if ~exist('subjectName','var');         subjectName='';                       end
+if ~exist('folderName','var');          folderName='';                        end
+if ~exist('displayResultsFlag','var');  displayResultsFlag=1;                 end
+if ~exist('PlotH','var');               PlotH=[];                             end
+if ~exist('fontSizeVal','var');         fontSizeVal = 8;                      end
 
 if isempty(folderName)
     pathStr = fileparts(pwd);
@@ -93,7 +94,7 @@ else
         
         meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
         
-        deltaPowerVsTimeTMP = powerVsTimeTMP - repmat(meanCalibrationPower,1,50);
+        deltaPowerVsTimeTMP = 10*(powerVsTimeTMP - repmat(meanCalibrationPower,1,50));
         
         meanEyeOpenPower     = mean(powerVsTimeTMP(calibrationData.timePosCalibration));
         semEyeOpenPower      = std(powerVsTimeTMP(calibrationData.timePosCalibration))/sqrt(length(calibrationData.timePosCalibration));
@@ -110,6 +111,7 @@ else
     end
     
     timeVals = analysisData.timeValsTF;
+    timePosAnalysis = analysisData.timePosAnalysis;
     
     if displayResultsFlag
         % Plot Data
@@ -148,27 +150,33 @@ else
                 
                 % Power versus time
 %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
-               
+                  plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                
+                 %%%%%%%%%%% Calculate Report the average value using text at specified position %%%%
                 switch i
                     case 1
                         disp('Trialtype: Valid');
                         deltaPowerVsTimeList_valid      = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_valid = mean(deltaPowerVsTimeList_valid,1);
-                        EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(20:45);
+                        EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(timePosAnalysis);
+%                         text(plotH_deltaPowerVsTime,30,1.6,num2str(mean(EX_mean_deltaPowerVsTimeList_valid)),'Color','red','FontSize',8);
+                        text(0.05,0.9,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+%                         hold(plotH_deltaPowerVsTime,'on');
                     case 2
                         disp('Traialtype: Invalid');
                         deltaPowerVsTimeList_invalid      = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_invalid = mean(deltaPowerVsTimeList_invalid,1);
-                        EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(20:45);
+                        EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(timePosAnalysis);
+                        text(0.05,0.76,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                     case 3
                         disp('Trailtype: Constant');
                         deltaPowerVsTimeList_constant = deltaPowerVsTimeList(trialPos,:);
                         mean_deltaPowerVsTimeList_constant = mean(deltaPowerVsTimeList_constant,1);
-                        EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(20:45);
+                        EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(timePosAnalysis);
+                        text(0.05,0.62,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
 %                     otherwise 
-                end
-                      
-                plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                end               
+                                   
                 hold(plotH_deltaPowerVsTime,'on');
                 % Update the axis names
                 
@@ -176,8 +184,25 @@ else
 %                 bar(analysisPlotHandles.barPlot,i,mean(deltaPower),colorNames(i));
 %                 errorbar(analysisPlotHandles.barPlot,i,mean(deltaPower),std(deltaPower)/sqrt(length(deltaPower)),'color',colorNames(i));
 %                 disp(mean(deltaPower));
+
+
             end
         end
+        
+         %%%%%%%%%%% Calculate and Report the p value between valid and invalid calucula%%%%
+        [h,pval1] = ttest2(EX_mean_deltaPowerVsTimeList_valid,EX_mean_deltaPowerVsTimeList_invalid,'Alpha',0.05,'Tail','right','Vartype','unequal');
+%         text(0.6,0.9,['p<10^{' ceil(log10(pval1)) '}' ],'color',[0 0 0],'fontsize',10,'fontweight','bold','normalized','parent',plotH_deltaPowerVsTime);
+        if pval1<0.01
+             text(0.6,0.9,['p < 10^{' num2str(ceil(log10(pval1))) '}'],'color',[1 0.2695 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+        else
+            phVal = num2str(pval1,'%.3f'); 
+            text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+        end
+             disp(h);                    
+%         s1 = num2str(pval1,'%.3f'); s2 = ','; s3 = num2str(h);
+%         phVal = strcat(s1,s2,s3);
+%         text(0.9,0.9,phVal,'Color',[1 0.2695 0],'fontsize',10,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+        
 %         title(analysisPlotHandles.powerVsTrial,titleStr);
 %         xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
 %         set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);

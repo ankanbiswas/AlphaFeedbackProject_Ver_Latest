@@ -7,7 +7,7 @@
 % Duration of trial  = 50 sec
 
 % trialtypes: Valid: 1, Invalid: 2, Constant: 3;
-figure(100)
+figure(102)
 fontsize = 10;
 
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
@@ -52,6 +52,10 @@ for i=1:numSubjects
     %%%% Changing plot properties
     % legend([h1 h2 h3],'','','','Location','Best')
     title(plotH.deltaPowerVsTime,['Subject',num2str(i)]);
+    % making all the axis equal:
+%     ylim(plotH.deltaPowerVsTime,[-0.5 1.8]);
+    xlim(plotH.deltaPowerVsTime,[5 52]);
+    
     if numSubjects <= 6 || subInd >= 19
         xlabel(plotH.deltaPowerVsTime,'Time(sec)','fontsize',fontsize,'fontweight','bold');
     end
