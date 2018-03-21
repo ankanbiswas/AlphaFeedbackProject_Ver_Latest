@@ -9,6 +9,7 @@
 % trialtypes: Valid: 1, Invalid: 2, Constant: 3;
 figure(102)
 fontsize = 10;
+startTrialTimePos = 13; % default one
 
 subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
     'KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL', ...
@@ -46,12 +47,12 @@ for i=1:numSubjects
     %     set(h, 'Visible', 'on'); % Control visibility of the figure
     
     [plotH,colorNames,~,~,~,~,~,~,~,~,~,timeVals,typeNameList] ...
-        = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH);
+        = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH,startTrialTimePos);
     %     flag;
     
     %%%% Changing plot properties
     % legend([h1 h2 h3],'','','','Location','Best')
-    title(plotH.deltaPowerVsTime,['Subject',num2str(i)]);
+%     title(plotH.deltaPowerVsTime,['Subject',num2str(i)]);
     % making all the axis equal:
 %     ylim(plotH.deltaPowerVsTime,[-0.5 1.8]);
     xlim(plotH.deltaPowerVsTime,[5 52]);
@@ -66,6 +67,16 @@ for i=1:numSubjects
     
     %     disp('one subject data analysis completed');
 end
+
+    set(findobj(gcf,'type','axes'),'box','off'...
+    ,'fontsize',fontsize...
+    ,'FontWeight','Bold'...
+    ,'TickDir','out'...
+    ,'TickLength',[0.02 0.02]...
+    ,'linewidth',1.2...
+    ,'xcolor',[0 0 0]...
+    ,'ycolor',[0 0 0]...
+    );
 
 % save('EX_mean_deltaPowerVsTimeList_trialtypes','EX_mean_deltaPowerVsTimeList_valid','EX_mean_deltaPowerVsTimeList_invalid','EX_mean_deltaPowerVsTimeList_constant');
 

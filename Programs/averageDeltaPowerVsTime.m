@@ -1,6 +1,7 @@
 
 function averageDeltaPowerVsTime(startTrialTimePos,hAverageDeltaPowerVsTime,fontsize)
-    subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS','KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL','PK','PB','PM','SKH','AD'};
+%     subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS','KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL','PK','PB','PM','SKH','AD'};
+    subjectNames = {'PB'};
     numSubjects=length(subjectNames);
 %     startTrialTimePos = input('Input the start trial position, Default value 13 \n'); % change accordingly
     if ~exist('startTrialTimePos','var'),  startTrialTimePos = 13; end %taking default value
@@ -25,8 +26,8 @@ function averageDeltaPowerVsTime(startTrialTimePos,hAverageDeltaPowerVsTime,font
         axes(hAverageDeltaPowerVsTime);
         meanAllPowerVsTime{j} = mean(meanPowerVsTime,1);
         semAllPowerVsTime{j}  = std(meanPowerVsTime,[],1)/sqrt(numSubjects);
-    %     plot(analysisPlotHandles.powerVsTime,meanAllPowerVsTime{j},'color',colorNames(j));
-        shadedErrorBar(timeVals,meanAllPowerVsTime{j},semAllPowerVsTime{j},colorNames(j),1);
+        plot(timeVals,meanAllPowerVsTime{j},'color',colorNames(j),'linewidth',3);
+%         shadedErrorBar(timeVals,meanAllPowerVsTime{j},semAllPowerVsTime{j},colorNames(j),1);
     end
     xlim(hAverageDeltaPowerVsTime,[5 50]);
     xlabel(hAverageDeltaPowerVsTime,'Time(sec)','fontsize',fontsize,'fontweight','bold');

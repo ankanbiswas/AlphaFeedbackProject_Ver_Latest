@@ -84,7 +84,7 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             powerVsTimeTMP  = log10(mean(analysisData.tfData(analysisData.alphaPos,:),1));
             
             meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
-            deltaPowerVsTimeTMP = powerVsTimeTMP - repmat(meanCalibrationPower,1,50);
+            deltaPowerVsTimeTMP = 10*(powerVsTimeTMP - repmat(meanCalibrationPower,1,50));
             
             meanEyeOpenPower     = mean(powerVsTimeTMP(calibrationData.timePosCalibration));
             semEyeOpenPower      = std(powerVsTimeTMP(calibrationData.timePosCalibration))/sqrt(length(calibrationData.timePosCalibration));

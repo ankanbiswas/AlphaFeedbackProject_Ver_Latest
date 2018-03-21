@@ -9,7 +9,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
           EX_mean_deltaPowerVsTimeList_invalid,EX_mean_deltaPowerVsTimeList_constant,...
           timeVals,typeNameList]...
           = ba_EX_meanDeltaPowerVsTime(subjectName,folderName,...
-                           displayResultsFlag,PlotH)
+                           displayResultsFlag,PlotH,startTrialTimePos)
                        
 
 if ~exist('subjectName','var');         subjectName='';                       end
@@ -17,6 +17,7 @@ if ~exist('folderName','var');          folderName='';                        en
 if ~exist('displayResultsFlag','var');  displayResultsFlag=1;                 end
 if ~exist('PlotH','var');               PlotH=[];                             end
 if ~exist('fontSizeVal','var');         fontSizeVal = 8;                      end
+if ~exist('startTrialTimePos','var'),   startTrialTimePos = 13;               end %taking default value
 
 if isempty(folderName)
     pathStr = fileparts(pwd);
@@ -91,7 +92,6 @@ else
         analysisData        = load(fullfile(folderName,[subjectName 'ProcessedData' 'Session' num2str(sessionNumList(i)) 'Trial' num2str(trialNumList(i)) '.mat']));
         powerVsTimeTMP      = log10(mean(analysisData.tfData(analysisData.alphaPos,:),1));
         
-        
         meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
         
         deltaPowerVsTimeTMP = 10*(powerVsTimeTMP - repmat(meanCalibrationPower,1,50));
@@ -131,7 +131,9 @@ else
         % Modify here to generate separate data matrix for delta power according to Trial types
         
         for i=1:3 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
-            trialPos = find(trialTypeList1D==i); 
+%             trialPos = find(trialTypeList1D==i); 
+            shortPosList = startTrialTimePos:60;
+            trialPos = shortPosList(trialTypeList1D(shortPosList)==i);
             
 %             if i==3 % no mod required
 %                 titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos))]);
