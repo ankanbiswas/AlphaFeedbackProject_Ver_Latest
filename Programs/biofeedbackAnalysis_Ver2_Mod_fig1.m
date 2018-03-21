@@ -111,13 +111,17 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             % Power versus Trial without any specific trial type indication:
             
             trialno = 1:60;
-            errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
-            errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
-            plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k');
-            %         shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
+%             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
+%             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
+              hold(analysisPlotHandles.powerVsTime,'on');
+              plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,'color','k','linewidth',1.2);
+              plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,'color','k','linewidth',1.2);
+              plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k','linewidth',2);
+           
+            % shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
             
             %         hold(analysisPlotHandles.diffPowerVsTrial,'on');
-            hold(analysisPlotHandles.powerVsTime,'on');
+%             hold(analysisPlotHandles.powerVsTime,'on');
             hold(analysisPlotHandles.barPlot,'on');
             for i=1:3 % Trial Type
                 trialPos = find(trialTypeList1D==i);
@@ -129,8 +133,8 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
                 
                 if ~isempty(trialPos)
                     % Power versus Trial
-                    %                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
-                    %                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
+                    errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
+                    errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
                     
                     % Change in Power versus Trial, separated by trialType
                     %                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
@@ -141,7 +145,7 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
                     
                     % Power versus time
                     tempmeanPower = mean(deltaPower,1);
-                    plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF(6:end),tempmeanPower(6:end),'color',colorNames(i));
+                    plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF(6:end),tempmeanPower(6:end),'color',colorNames(i),'LineWidth',2);
                     
                     % Bar Plot
                     bar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),colorNames(i));
@@ -152,6 +156,8 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             title(analysisPlotHandles.powerVsTrial,titleStr);
             xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
             set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
+            hold(analysisPlotHandles.powerVsTime,'off');
+            hold(analysisPlotHandles.barPlot,'off');
             drawnow;
         end
     end

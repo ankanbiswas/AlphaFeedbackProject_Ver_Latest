@@ -5,25 +5,30 @@ function biofeedbackFigure1(subjectName,folderName)
     % Input:
         % Subject name as string
         % foldername (optional)
-     
-    randomfigurenumber = 100+randi(100); 
+        
+    % Generating figure and defining font properties:
+    randomfigurenumber  = 100+randi(100); 
     figure(randomfigurenumber);
+    fontSizeVal         = 10;
+    hFigure1            = gcf;
+    %     set(gcf,'Visible', 'off'); 
     
+    %---------------------------------------------------------------
+    % Defining parameters for extracting out data:
+%     subjectName     = 'PB';
+    SessionNumber   = 2;
+    trialNumber     = 4;
     
-    if ~exist('subjectName','var'); subjectName = 'PB'; end
-    if ~exist('folderName','var');  folderName  = '';    end
-    
-    fontSizeVal = 10;
-    
+    if ~exist('subjectName',    'var');      subjectName       = 'PB';         end
+    if ~exist('folderName',     'var');      folderName        = '';           end
+    if ~exist('SessionNumber',  'var'),      SessionNumber     = 2;            end  
+    if ~exist('trialNumber',    'var'),      trialNumber       = 4;            end
+            
     if isempty(folderName)
         pathStr     = fileparts(pwd);
         folderName  = fullfile(pathStr,'Data',subjectName);
     end
-    
-    hFigure1          = gcf; % Creating 
-    
-%     set(gcf,'Visible', 'off'); 
-    
+       
     hExperimentFlow   = subplot('Position',[0.05 0.9 0.9 0.04],'Parent',hFigure1);
     hTFPlot           = getPlotHandles(2,1,[0.05 0.1 0.3 0.67],0.01,0.08,0);
     hsubplotDE        = getPlotHandles(1,2,[0.46 0.1 0.53 0.63],0.05,0.01,0);
@@ -77,27 +82,25 @@ function biofeedbackFigure1(subjectName,folderName)
     hold(hExperimentFlow,'off');
     
 %     hExperimentFlow.YAxis.Visible = 'off';  % Alternative way
-%   
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%% Subplot 1.b(2) (hFreqVsTime) %%%%%%%%%%%%%%%%%%%%
-    
     % spectogram plot
-    % we need frequency, power and time. 
 %%%     SessionNumber   = input('Input the Session Number, Default value 2 \n');
-    if ~exist('SessionNumber','var'),  SessionNumber   = 2;     end    
+     
 %%%     trialNumber     = input('Input the trial Number, Default value 13 \n'); % change accordingly
-    if ~exist('trialNumber','var'),    trialNumber     = 4;     end
-    
+       
     calibrationData     = load(fullfile(folderName,[subjectName 'CalibrationProcessedData' 'Session' num2str(SessionNumber) '.mat']));
     analysisData        = load(fullfile(folderName,[subjectName 'ProcessedData' 'Session' num2str(SessionNumber) 'Trial' num2str(trialNumber) '.mat']));
     
     tfDataTMP           = log10(analysisData.tfData);
+    Alpha_tfDataTMP     = log10(mean(analysisData.tfData(analysisData.alphaPos,:),1));
     
 %%% change this if have to use only alpha power from the data matrix:
 %     meanCalibrationPower    = log10(mean(calibrationData.tfData,2)); % taking log of mean
     meanCalibrationPower     = mean(log10(calibrationData.tfData),2); % taking mean of log
     freqVsTimevsDeltaPower   = 10*(tfDataTMP - repmat(meanCalibrationPower,1,size(tfDataTMP,2)));
-    
+           
     freqVals    = analysisData.freqVals;    
     timeValsTF  = analysisData.timeValsTF ;
     stFreqList  = analysisData.stFreqList(6:end);
@@ -117,30 +120,39 @@ function biofeedbackFigure1(subjectName,folderName)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%% Subplot 1.c(3) (hPowervsTime) %%%%%%%%%%%%%%%%%%%
-        
+   
     deltaPowerVsTime = mean(freqVsTimevsDeltaPower,1); 
-    axes(hPowervsTime);
-    yyaxis(gca,'left');
-    plot(gca,timeValsTF(6:end),deltaPowerVsTime(6:end));
+%     axes(hPowervsTime);
+%     yyaxis(gca,'left');
+    plot(hPowervsTime,timeValsTF(6:end),deltaPowerVsTime(6:end),'linewidth',2);
 %     set(hPowervsTime,'fontsize',fontsize,'fontweight','bold');
-    ylabel(gca,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
-    xlabel(gca,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
-    
-    yyaxis(gca,'right');
-    plot(gca,timeValsTF(6:end),stFreqList);
-    ylabel(gca,'Tone Frequency (Hz)','fontsize',fontSizeVal,'fontweight','bold');
-    xlim(gca,[5 50]);
-    hold(gca,'off');
+    ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+    xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
+    hold(hPowervsTime,'on');
+    %-------------------------------------------------------------------------------
+     Alpha_meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
+     Alpha_deltaPowerVsTimeTMP = 10*(Alpha_tfDataTMP - repmat(Alpha_meanCalibrationPower,1,50));
+     [hAx_hPowervsTime,hAlpha_deltaPowerVsTimeTMP,hstFreqList] = plotyy(hPowervsTime,timeValsTF(6:end),Alpha_deltaPowerVsTimeTMP(6:end),timeValsTF(6:end),stFreqList);
+     ylabel(hAx_hPowervsTime(2),'Tone Frequency (Hz)')
+     set(hAx_hPowervsTime(2),'fontsize',fontSizeVal,'fontweight','bold'); 
+     set(hAlpha_deltaPowerVsTimeTMP,'linewidth',2,'Color',[0.5430 0 0]);
+     set(hAx_hPowervsTime(1),'YColor',[0.5430 0 0]);
+     set(hstFreqList,'linewidth',2,'Color',[0.1328 0.5430 0.1328]);
+     set(hAx_hPowervsTime(2),'YColor',[0.1328 0.5430 0.1328]);
+     set(hAx_hPowervsTime(2),'XLim',[5 50]);
+     set(hPowervsTime,'XLim',[5 50]);
+%     yyaxis(gca,'right');
+%     plot(gca,timeValsTF(6:end),stFreqList);
+%     ylabel(gca,'Tone Frequency (Hz)','fontsize',fontSizeVal,'fontweight','bold');
+     xlim(hPowervsTime,[5 50]);
+     legend({'RawPower','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Position',[0.00001,0.33,0.2,0.05]);
+     hold(hPowervsTime,'off');
 %%%     title(hPowervsTime,'','fontsize',fontsize,'fontweight','bold'); 
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%% Subplot 1.d(4) (hRawAlphaPowerVsTrials) %%%%%%%%%
-     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%% Subplot 1.e(5) (hChInAlphaPowerVsTime) %%%%%%%%%%
-          
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %%%%%%%%%%%%%%%%%%%%% Subplot 1.e.2(6) (hChInAlphaPowerVsTrialtypes) %%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%  Subplot 1.e(5) (hChInAlphaPowerVsTime) %%%%%%%%%% 
+    %%%%%%%%%%%%%%%%%%%%% Subplot 1.e.2(6) (hChInAlphaPowerVsTrialtypes) %%
     
     analysisPlotHandles.powerVsTrial    = hRawAlphaPowerVsTrials;
     analysisPlotHandles.powerVsTime     = hChInAlphaPowerVsTime; 
@@ -153,7 +165,8 @@ function biofeedbackFigure1(subjectName,folderName)
 %     trialTypeList1D(i,:),powerVsTimeList(i,:,:),timeVals,typeNameList] ...
 %         = biofeedbackAnalysis_Ver2(subjectNames{i},'',1,[]);
     
-    %% Providing the legends and axis names:
+    %---------------------------------------------------------------
+    % Providing the legends and axis names:
     
     % legend([h1 h2 h3],'','','','Location','Best')
     set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
@@ -167,31 +180,32 @@ function biofeedbackFigure1(subjectName,folderName)
     xlim(analysisPlotHandles.powerVsTime,[5 51]);
     xlabel(analysisPlotHandles.powerVsTime,'Time(sec)','fontsize',fontSizeVal,'fontweight','bold');
     ylabel(analysisPlotHandles.powerVsTime,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+%     legend(analysisPlotHandles.powerVsTime,{'RawPower','Alpha Power','Frequency'},'Orientation','vertical','Location','Best','Box','off','FontSize',8,'Units','Normalized');
+    
     xlabel(analysisPlotHandles.barPlot,'TrialTypes','fontsize',fontSizeVal,'fontweight','bold');
     ylabel(analysisPlotHandles.barPlot,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');   
     
+    %---------------------------------------------------------------
+    % Changing the figure and axes properties to make it nicer:
+    
     title(hExperimentFlow,['Subject: ', subjectName]);
     disp('one subject data analysis completed');
-    
-    
+       
     % Changing axis properties of the figures:
     set(findobj(gcf,'type','axes'),'box','off'...
     ,'fontsize',fontSizeVal...
     ,'FontWeight','Bold'...
     ,'TickDir','out'...
     ,'TickLength',[0.02 0.02]...
-    ,'linewidth',1.2...
-    ,'xcolor',[0 0 0]...
-    ,'ycolor',[0 0 0]...
+    ,'linewidth',1.5 ...
     );
-
+%     ,'xcolor',[0 0 0]...
+%     ,'ycolor',[0 0 0]...
     % Resetting first axis:
     set(hExperimentFlow,'Ytick',[]);
     set(hExperimentFlow,'Ycolor',[1 1 1]);  % Making yaxis invisible
-
-    set(findall(gcf, 'Type', 'Line'),'LineWidth',2);
-    set(findall(gcf, 'Type', 'errorbar'),'LineWidth',1.2);
-  
-    
+    % Changin the linewidth:
+%     set(findall(analysisPlotHandles.powerVsTime, 'Type', 'Line'),'LineWidth',2);
+    set(findall(gcf, 'Type', 'errorbar'),'LineWidth',1.2);   
  
 end

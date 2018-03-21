@@ -11,20 +11,31 @@ figure(102)
 fontsize = 10;
 startTrialTimePos = 13; % default one
 
-subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS', ...
-    'KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL', ...
-    'PK','PB','PM','SKH','AD'}';
-numSubjects = 24; % no of subjects for which analysis would be carried out
+% subjectNames = {'ABA','AJ','DB','DD','HS',...
+%                 'SB','SG','SS','SSH','SKS', ...
+%                 'KNB','SSA','SHG','MP','MJR',...
+%                 'ARC','TBR','BPP','SL','PK',...
+%                 'PB','PM','SKH','AD'}';
+subjectNames = {'ABA','ARC','DD','AJ','SG',...
+                'MP','PB','SSA','SL','DB', ...
+                'PK','HS','AD','SB','SS',...
+                'SHG','KNB','KNB','BPP','SSH',...
+                'MJR','TBR','SKH','PM'}';           
 
+
+numSubjects = length(subjectNames); % no of subjects for which analysis would be carried out
+numSubList = 1:numSubjects;
+numSubList = numSubList';
 % Change the subplots in the figure accroding to the numsubjects
 % And get the passon the figurehandles when the analysis function is called
 
-if numSubjects <= 6
-    h = getPlotHandles(1,numSubjects);
-else
-    h = getPlotHandles(ceil(numSubjects/6),6);
-end
+% if numSubjects <= 6
+%     h = getPlotHandles(1,numSubjects);
+% else
+%     h = getPlotHandles(ceil(numSubjects/6),6);
+% end
 
+h = getPlotHandles(4,6,[0.06 0.07 0.9 0.9],0.03,0.04);
 h2 = h';
 h3 = h2(:);
 
@@ -38,6 +49,7 @@ h3 = h2(:);
 % EX_mean_deltaPowerVsTimeList_valid      = [];
 % EX_mean_deltaPowerVsTimeList_invalid    = [];
 % EX_mean_deltaPowerVsTimeList_constant   = [];
+AllSubPVal = [];
 
 for i=1:numSubjects
     subInd = i;
@@ -46,8 +58,8 @@ for i=1:numSubjects
     %     h= figure(i);
     %     set(h, 'Visible', 'on'); % Control visibility of the figure
     
-    [plotH,colorNames,~,~,~,~,~,~,~,~,~,timeVals,typeNameList] ...
-        = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH,startTrialTimePos);
+    [plotH,colorNames,~,~,~,~,~,~,~,~,~,timeVals,typeNameList,SubPValTemp] ...
+        = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH,startTrialTimePos,subInd);
     %     flag;
     
     %%%% Changing plot properties
@@ -63,9 +75,9 @@ for i=1:numSubjects
     if  subInd == 1 || subInd == 7 || subInd == 13 || subInd == 19
         ylabel(plotH.deltaPowerVsTime,'\DeltaPower(dB)','fontsize',fontsize,'fontweight','bold');
     end
-%     set(plotH.deltaPowerVsTim,'fontsize',fontsize,'fontweight','bold');
-    
+    %     set(plotH.deltaPowerVsTim,'fontsize',fontsize,'fontweight','bold');
     %     disp('one subject data analysis completed');
+    AllSubPVal = [AllSubPVal;SubPValTemp];
 end
 
     set(findobj(gcf,'type','axes'),'box','off'...
@@ -78,6 +90,13 @@ end
     ,'ycolor',[0 0 0]...
     );
 
-% save('EX_mean_deltaPowerVsTimeList_trialtypes','EX_mean_deltaPowerVsTimeList_valid','EX_mean_deltaPowerVsTimeList_invalid','EX_mean_deltaPowerVsTimeList_constant');
+set(findall(gcf, 'Type', 'Line'),'LineWidth',2)
+
+SublistPvalueMat = [AllSubPVal,numSubList];
+[~,idx] = sort(SublistPvalueMat(:,1));
+SublistPvalueMatSorted = SublistPvalueMat(idx,:);
+% SublistPValueCell{:,1} = subjectNames;
+% SublistPValueCell{:,2} = AllSubPVal;
+save('EX_AllSubPVal','SublistPvalueMat','SublistPvalueMatSorted');
 
 % end

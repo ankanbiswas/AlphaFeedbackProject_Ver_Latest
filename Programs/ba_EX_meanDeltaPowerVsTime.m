@@ -7,9 +7,9 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
           meanEyeClosedPowerList,calibrationPowerList, ...
           trialTypeList1D,powerVsTimeList,deltaPowerVsTimeList,EX_mean_deltaPowerVsTimeList_valid,...
           EX_mean_deltaPowerVsTimeList_invalid,EX_mean_deltaPowerVsTimeList_constant,...
-          timeVals,typeNameList]...
+          timeVals,typeNameList,SubPValTemp]...
           = ba_EX_meanDeltaPowerVsTime(subjectName,folderName,...
-                           displayResultsFlag,PlotH,startTrialTimePos)
+                           displayResultsFlag,PlotH,startTrialTimePos,subInd)
                        
 
 if ~exist('subjectName','var');         subjectName='';                       end
@@ -85,6 +85,7 @@ else
     semEyeOpenPowerList           = []; % sem of alpha power during Eye Open condition
     meanEyeClosedPowerList        = []; % Mean alpha power during Eye Closed condition
     semEyeClosedPowerList         = []; % sem of alpha power during Eye Closed condition
+    SubPValTemp                    = [];
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     for i=1:numTotalTrials
@@ -153,7 +154,7 @@ else
                 % Power versus time
 %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
                   plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                
+%                   ylim(plotH_deltaPowerVsTime,[
                  %%%%%%%%%%% Calculate Report the average value using text at specified position %%%%
                 switch i
                     case 1
@@ -193,12 +194,13 @@ else
         
          %%%%%%%%%%% Calculate and Report the p value between valid and invalid calucula%%%%
         [h,pval1] = ttest2(EX_mean_deltaPowerVsTimeList_valid,EX_mean_deltaPowerVsTimeList_invalid,'Alpha',0.05,'Tail','right','Vartype','unequal');
+        SubPValTemp  = pval1;
 %         text(0.6,0.9,['p<10^{' ceil(log10(pval1)) '}' ],'color',[0 0 0],'fontsize',10,'fontweight','bold','normalized','parent',plotH_deltaPowerVsTime);
         if pval1<0.01
-             text(0.6,0.9,['p < 10^{' num2str(ceil(log10(pval1))) '}'],'color',[1 0.2695 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+             text(0.6,0.9,['p < 10^{' num2str(ceil(log10(pval1))) '}'],'color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
         else
             phVal = num2str(pval1,'%.3f'); 
-            text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+            text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
         end
              disp(h);                    
 %         s1 = num2str(pval1,'%.3f'); s2 = ','; s3 = num2str(h);
@@ -208,6 +210,10 @@ else
 %         title(analysisPlotHandles.powerVsTrial,titleStr);
 %         xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
 %         set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
+        if subInd <19
+            set(plotH_deltaPowerVsTime,'Xtick',[]);
+        end
+        ylim(plotH_deltaPowerVsTime,[-5 20]);
         drawnow;
     end
 end
