@@ -11,7 +11,7 @@
 
 fontsize = 14;
 
-hfig4 = figure(5);
+hfig4 = figure(4);
 hdeltaSlopeVsSlopeInvalid = axes('parent',hfig4,'unit','normalized','Position',[0.17 0.15 0.68 0.8]);
 % hdeltaSlopeVsSlopeInvalid = subplot(1,1,1,'parent',hfig4);
 % hAverageDeltaPowerVsTime  = subplot(1,2,1);
@@ -35,6 +35,9 @@ set(hplot,'box','off'...
     ,'xcolor',[0 0 0]...
     ,'ycolor',[0 0 0]...
     );
+
+text(0.8,0.9,'N = 24','Color','k','fontsize',fontsize,...
+    'fontweight','bold','unit','normalized','parent',hplot);
 
 % hplot = hAverageDeltaPowerVsTime;
 % subplot(hplot);

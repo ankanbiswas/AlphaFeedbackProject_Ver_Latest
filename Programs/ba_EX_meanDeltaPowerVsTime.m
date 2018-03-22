@@ -131,7 +131,7 @@ else
         
         % Modify here to generate separate data matrix for delta power according to Trial types
         
-        for i=1:3 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
+        for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
 %             trialPos = find(trialTypeList1D==i); 
             shortPosList = startTrialTimePos:60;
             trialPos = shortPosList(trialTypeList1D(shortPosList)==i);
@@ -211,7 +211,7 @@ else
 %         xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
 %         set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
         if subInd <19
-            set(plotH_deltaPowerVsTime,'Xtick',[]);
+            set(plotH_deltaPowerVsTime,'xticklabel',[]);
         end
         ylim(plotH_deltaPowerVsTime,[-5 20]);
         drawnow;

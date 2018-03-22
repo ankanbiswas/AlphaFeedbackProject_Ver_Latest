@@ -92,13 +92,13 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,fon
     
     for i = 1:length(slopeMatrixSorted)
         if (slopeMatrixSorted(i,1) < 0) && (slopeMatrixSorted(i,2) > 0)
-            scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrixSorted(i,1),slopeMatrixSorted(i,2),dotSize,'*','k');
+            scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrixSorted(i,1),slopeMatrixSorted(i,2),dotSize,'^','k','filled');
         else
             scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrixSorted(i,1),slopeMatrixSorted(i,2),dotSize,'o','k','filled');            
         end
         hold(hdeltaSlopeVsSlopeInvalid,'on');
     end
-    legend(hdeltaSlopeVsSlopeInvalid,'slope');
+%     legend(hdeltaSlopeVsSlopeInvalid,'slope');
     xlabel(hdeltaSlopeVsSlopeInvalid,'Constant Slope','fontsize',fontsize,'fontweight','bold');
     ylabel(hdeltaSlopeVsSlopeInvalid,'\delta (Valid - Invalid) Power','fontsize',fontsize,'fontweight','bold');
     

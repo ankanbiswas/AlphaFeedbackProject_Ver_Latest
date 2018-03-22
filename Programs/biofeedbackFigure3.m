@@ -35,7 +35,7 @@ numSubList = numSubList';
 %     h = getPlotHandles(ceil(numSubjects/6),6);
 % end
 
-h = getPlotHandles(4,6,[0.06 0.07 0.9 0.9],0.03,0.04);
+h = getPlotHandles(4,6,[0.06 0.07 0.9 0.9],0.02,0.02);
 h2 = h';
 h3 = h2(:);
 
@@ -74,6 +74,8 @@ for i=1:numSubjects
     end
     if  subInd == 1 || subInd == 7 || subInd == 13 || subInd == 19
         ylabel(plotH.deltaPowerVsTime,'\DeltaPower(dB)','fontsize',fontsize,'fontweight','bold');
+    else
+        set(plotH.deltaPowerVsTime,'yticklabel',[]);
     end
     %     set(plotH.deltaPowerVsTim,'fontsize',fontsize,'fontweight','bold');
     %     disp('one subject data analysis completed');
@@ -85,7 +87,7 @@ end
     ,'FontWeight','Bold'...
     ,'TickDir','out'...
     ,'TickLength',[0.02 0.02]...
-    ,'linewidth',1.2...
+    ,'linewidth',1.5 ...
     ,'xcolor',[0 0 0]...
     ,'ycolor',[0 0 0]...
     );

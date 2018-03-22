@@ -7,6 +7,7 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
     if ~exist('folderName','var');          folderName='';                  end
     if ~exist('displayResultsFlag','var');  displayResultsFlag=1;           end
     if ~exist('analysisPlotHandles','var'); analysisPlotHandles=[];         end
+    if ~exist('fontSizeVal','var');         fontSizeVal = 12;               end
     
     if isempty(folderName)
         pathStr     = fileparts(pwd);
@@ -20,7 +21,7 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
         
         analysisPlotHandles.powerVsTrial    = subplot(2,2,1);
         analysisPlotHandles.powerVsTime     = subplot(2,2,2);
-        analysisPlotHandles.barPlot         = subplot(2,2,4);
+        %         analysisPlotHandles.barPlot         = subplot(2,2,4);
         
         
         %     analysisPlotHandles.powerVsTrial = subplot(2,2,1);
@@ -38,7 +39,7 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
         cla(analysisPlotHandles.powerVsTrial);
         %     cla(analysisPlotHandles.diffPowerVsTrial);
         cla(analysisPlotHandles.powerVsTime);
-        cla(analysisPlotHandles.barPlot);
+        %         cla(analysisPlotHandles.barPlot);
     end
     
     colorNames      = 'rgb';
@@ -111,19 +112,19 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             % Power versus Trial without any specific trial type indication:
             
             trialno = 1:60;
-%             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
-%             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
-              hold(analysisPlotHandles.powerVsTime,'on');
-              plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,'color','k','linewidth',1.2);
-              plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,'color','k','linewidth',1.2);
-              plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k','linewidth',2);
-           
+            %             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
+            %             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
+            hold(analysisPlotHandles.powerVsTime,'on');
+            plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,'color','k','linewidth',1.2);
+            plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,'color','k','linewidth',1.2);
+            plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k','linewidth',2);
+            
             % shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
             
             %         hold(analysisPlotHandles.diffPowerVsTrial,'on');
-%             hold(analysisPlotHandles.powerVsTime,'on');
-            hold(analysisPlotHandles.barPlot,'on');
-            for i=1:3 % Trial Type
+            %             hold(analysisPlotHandles.powerVsTime,'on');
+            %             hold(analysisPlotHandles.barPlot,'on');
+            for i=3:-1:1 % Trial Type
                 trialPos = find(trialTypeList1D==i);
                 if i==3
                     titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos))]);
@@ -140,24 +141,52 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
                     %                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
                     deltaPower = deltaPowerVsTimeList(trialPos,:);
                     mean_deltaPower = mean(deltaPower,1);
-                    EX_mean_deltaPower = mean_deltaPower(20:50);
+                    EX_mean_deltaPower = mean_deltaPower(21:50);
                     %                 errorbar(analysisPlotHandles.diffPowerVsTrial,deltaPower,semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V');
                     
                     % Power versus time
                     tempmeanPower = mean(deltaPower,1);
                     plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF(6:end),tempmeanPower(6:end),'color',colorNames(i),'LineWidth',2);
                     
+                    %------------------------------------------------------
+                    switch i
+                        case 1
+                            % Fit a regression line using regress
+                            % Report P value and r value of the regression
+                            % line using text
+%                             meanAllSubmeanEyeOpenPowerList = mean(meanEyeOpenPowerList);
+                            timeAxis = 21:50;
+                            x = timeAxis';
+                            X = [ones(size(x)) x];
+                            y = EX_mean_deltaPower';
+                            [b,~,~,~,stats] = regress(y,X,0.01);
+%                             b = regress(y,X);
+                            xfit = min(x):1:max(x);
+                            YFIT = b(1) + b(2)*xfit;
+                            p_value_regress = stats(1);
+                            r_value_regress = stats(3);
+%                             scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
+                            plot(analysisPlotHandles.powerVsTime,xfit,YFIT,'color',[0 0 0],'linewidth',4);
+                            text(0.7,0.3,['p = ' num2str(p_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.7,0.25,['R^{2} = ' num2str(r_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.8,0.95,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                        case 2
+                            text(0.8,0.9,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                        case 3
+                            text(0.8,0.85,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                    end
+                    
                     % Bar Plot
-                    bar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),colorNames(i));
-                    errorbar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),std(EX_mean_deltaPower)/sqrt(length(EX_mean_deltaPower)),'color',colorNames(i));
-                    disp(mean(EX_mean_deltaPower));
+                    %                     bar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),colorNames(i));
+                    %                     errorbar(analysisPlotHandles.barPlot,i,mean(EX_mean_deltaPower),std(EX_mean_deltaPower)/sqrt(length(EX_mean_deltaPower)),'color',colorNames(i));
+                    %                     disp(mean(EX_mean_deltaPower));
                 end
             end
             title(analysisPlotHandles.powerVsTrial,titleStr);
-            xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
-            set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
+            %             xlim(analysisPlotHandles.barPlot,[0.5 3.5]);
+            %             set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
             hold(analysisPlotHandles.powerVsTime,'off');
-            hold(analysisPlotHandles.barPlot,'off');
+            %             hold(analysisPlotHandles.barPlot,'off');
             drawnow;
         end
     end

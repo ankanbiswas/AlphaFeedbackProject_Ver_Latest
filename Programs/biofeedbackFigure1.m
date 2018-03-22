@@ -30,7 +30,7 @@ function biofeedbackFigure1(subjectName,folderName)
     end
        
     hExperimentFlow   = subplot('Position',[0.05 0.9 0.9 0.04],'Parent',hFigure1);
-    hTFPlot           = getPlotHandles(2,1,[0.05 0.1 0.3 0.67],0.01,0.08,0);
+    hTFPlot           = getPlotHandles(2,1,[0.05 0.1 0.3 0.67],0.01,0.04,0);
     hsubplotDE        = getPlotHandles(1,2,[0.46 0.1 0.53 0.63],0.05,0.01,0);
     
     hFreqVsTime                 = hTFPlot(1);
@@ -40,7 +40,7 @@ function biofeedbackFigure1(subjectName,folderName)
     
     set(hChInAlphaPowerVsTime, 'Box', 'off');
 %     hChInAlphaPowerVsTrialtypes = axes('Position', [0.8 0.5 0.15 0.2]); % position for  within the figure 2
-    hChInAlphaPowerVsTrialtypes = axes('Position', [0.86 0.65 0.13 0.15]);
+%     hChInAlphaPowerVsTrialtypes = axes('Position', [0.86 0.65 0.13 0.15]);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%% Subplot 1 (hExperimentFlow) %%%%%%%%%%%%%%%%%%%%
@@ -81,6 +81,20 @@ function biofeedbackFigure1(subjectName,folderName)
     set(get(hExperimentFlow, 'XLabel'), 'Position', Xlabel_pos + [0 -1 0]);
     hold(hExperimentFlow,'off');
     
+    hValidText      = getPlotHandles(1,1,[0.76 0.95 0.04 0.02]);
+    rectangle(gca,'Position',[0 0 0.1 0.1],'FaceColor','r','EdgeColor','r',...
+        'LineWidth',1); axis(gca,'equal'); set(gca,'Visible','off');
+    text(gca,0.84,0.65,'Valid','Units','Normalized','fontsize',fontSizeVal,'fontweight','bold');
+    text(gca,-2.5,0.6,'Trial Types:','Units','Normalized','fontsize',fontSizeVal+2,'fontweight','bold');
+    hInValidText    = getPlotHandles(1,1,[0.82 0.95 0.04 0.02]);
+    rectangle(gca,'Position',[0 0 0.1 0.1],'FaceColor','g','EdgeColor','g',...
+        'LineWidth',1); axis(gca,'equal'); set(gca,'Visible','off');
+    text(gca,0.84,0.74,'Invalid','Units','Normalized','fontsize',fontSizeVal,'fontweight','bold');
+    hConstantText   = getPlotHandles(1,1,[0.88 0.95 0.04 0.02]);
+    rectangle(gca,'Position',[0 0 0.1 0.1],'FaceColor','b','EdgeColor','b',...
+        'LineWidth',1); axis(gca,'equal'); set(gca,'Visible','off');
+    text(gca,0.84,0.74,'Constant','Units','Normalized','fontsize',fontSizeVal,'fontweight','bold');
+    
 %     hExperimentFlow.YAxis.Visible = 'off';  % Alternative way
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -106,12 +120,14 @@ function biofeedbackFigure1(subjectName,folderName)
     stFreqList  = analysisData.stFreqList(6:end);
     
     %%%%% 2nd plot 
-    pcolor(hFreqVsTime,timeValsTF(6:end),freqVals,freqVsTimevsDeltaPower(:,6:end));  shading(hFreqVsTime,'interp'); % timevasl on row; freqval on column
+    pcolor(hFreqVsTime,timeValsTF(5:end),freqVals,freqVsTimevsDeltaPower(:,5:end));  shading(hFreqVsTime,'interp'); % timevasl on row; freqval on column
     colormap(hFreqVsTime,'jet'); cBar = colorbar(hFreqVsTime,'northoutside');
+    set(hFreqVsTime,'xticklabelmode','manual','xtick',[5.5 10:5:45 49.5],'xticklabel',[],'xlim',[5.5 49.5],'linewidth',4);
 
+%     set(hFreqVsTime,'xlim',[5 50]);
 %     set(hFreqVsTime,'fontsize',fontsize,'fontweight','bold');
     ylabel(hFreqVsTime,'Frequency (Hz)','fontsize',fontSizeVal,'fontweight','bold');
-    xlabel(hFreqVsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
+%     xlabel(hFreqVsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
 %     title(hFreqVsTime,'Delta spectogram','fontsize',fontsize,'fontweight','bold'); 
 
 %     set(cBar,'fontsize',fontsize,'fontweight','bold');
@@ -124,14 +140,24 @@ function biofeedbackFigure1(subjectName,folderName)
     deltaPowerVsTime = mean(freqVsTimevsDeltaPower,1); 
 %     axes(hPowervsTime);
 %     yyaxis(gca,'left');
-    plot(hPowervsTime,timeValsTF(6:end),deltaPowerVsTime(6:end),'linewidth',2);
-%     set(hPowervsTime,'fontsize',fontsize,'fontweight','bold');
-    ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
-    xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
+%     plot(hPowervsTime,timeValsTF(6:end),deltaPowerVsTime(6:end),'linewidth',2);
+% %     set(hPowervsTime,'fontsize',fontsize,'fontweight','bold');
+%     ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+%     xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
     hold(hPowervsTime,'on');
     %-------------------------------------------------------------------------------
      Alpha_meanCalibrationPower = mean(log10(mean(calibrationData.tfData(calibrationData.alphaPos,calibrationData.timePosCalibration),1)));
      Alpha_deltaPowerVsTimeTMP = 10*(Alpha_tfDataTMP - repmat(Alpha_meanCalibrationPower,1,50));
+     timeStartS = 5;
+     epochsToAvg = 5;
+     BoxCar_Alpha_deltaPowerVsTimeTMP = Alpha_deltaPowerVsTimeTMP;
+     for i = 5:50
+         BoxCar_Alpha_deltaPowerVsTimeTMP(i) = mean(Alpha_deltaPowerVsTimeTMP((timeStartS-epochsToAvg+1):timeStartS));
+         timeStartS = timeStartS+1;
+     end
+     %-------------------------------------------------------------------------------
+     plot(hPowervsTime,timeValsTF(6:end),BoxCar_Alpha_deltaPowerVsTimeTMP(6:end),'--','LineWidth',2,'Color',[1.0000,0.2695,0]);
+     ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
      [hAx_hPowervsTime,hAlpha_deltaPowerVsTimeTMP,hstFreqList] = plotyy(hPowervsTime,timeValsTF(6:end),Alpha_deltaPowerVsTimeTMP(6:end),timeValsTF(6:end),stFreqList);
      ylabel(hAx_hPowervsTime(2),'Tone Frequency (Hz)')
      set(hAx_hPowervsTime(2),'fontsize',fontSizeVal,'fontweight','bold'); 
@@ -140,12 +166,15 @@ function biofeedbackFigure1(subjectName,folderName)
      set(hstFreqList,'linewidth',2,'Color',[0.1328 0.5430 0.1328]);
      set(hAx_hPowervsTime(2),'YColor',[0.1328 0.5430 0.1328]);
      set(hAx_hPowervsTime(2),'XLim',[5 50]);
-     set(hPowervsTime,'XLim',[5 50]);
+     set(hPowervsTime,'xticklabelmode','manual','xtick',[5.5 10:5:45 49.5],'xticklabel',[5.5 10:5:45 49.5],'xlim',[5.5 49.5]);
+%      set(hPowervsTime,'XLim',[5 50]);
 %     yyaxis(gca,'right');
 %     plot(gca,timeValsTF(6:end),stFreqList);
 %     ylabel(gca,'Tone Frequency (Hz)','fontsize',fontSizeVal,'fontweight','bold');
      xlim(hPowervsTime,[5 50]);
-     legend({'RawPower','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Position',[0.00001,0.33,0.2,0.05]);
+%      legend({'Smoothed Alpha Power','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Position',[0.001,0.33,0.2,0.05]);
+     legend({'Smoothed Alpha Power','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Location','southeast');
+     xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
      hold(hPowervsTime,'off');
 %%%     title(hPowervsTime,'','fontsize',fontsize,'fontweight','bold'); 
     
@@ -156,9 +185,9 @@ function biofeedbackFigure1(subjectName,folderName)
     
     analysisPlotHandles.powerVsTrial    = hRawAlphaPowerVsTrials;
     analysisPlotHandles.powerVsTime     = hChInAlphaPowerVsTime; 
-    analysisPlotHandles.barPlot         = hChInAlphaPowerVsTrialtypes;
+%     analysisPlotHandles.barPlot         = hChInAlphaPowerVsTrialtypes;
     
-    [analysisPlotHandles,~,~,~,~,~,~,~,typeNameList]  = biofeedbackAnalysis_Ver2_Mod_fig1(subjectName,'',1,analysisPlotHandles);
+    [analysisPlotHandles,~,~,~,~,~,~,~,~]  = biofeedbackAnalysis_Ver2_Mod_fig1(subjectName,'',1,analysisPlotHandles);
 %     
 %     [analysisPlotHandles,colorNames,meanEyeOpenPowerList(i,:), ...
 %     meanEyeClosedPowerList(i,:),calibrationPowerList(i,:), ...
@@ -169,7 +198,8 @@ function biofeedbackFigure1(subjectName,folderName)
     % Providing the legends and axis names:
     
     % legend([h1 h2 h3],'','','','Location','Best')
-    set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
+%     set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
+    xlim(analysisPlotHandles.powerVsTrial,[-1 61]);
     xlabel(analysisPlotHandles.powerVsTrial,'TrialNo','fontsize',fontSizeVal,'fontweight','bold');
     ylabel(analysisPlotHandles.powerVsTrial,'Raw Alpha Power (log(AlphaPower))','fontsize',fontSizeVal,'fontweight','bold');
 %     xlabel(analysisPlotHandles.diffPowerVsTrial,'TrialNo');
@@ -182,8 +212,8 @@ function biofeedbackFigure1(subjectName,folderName)
     ylabel(analysisPlotHandles.powerVsTime,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
 %     legend(analysisPlotHandles.powerVsTime,{'RawPower','Alpha Power','Frequency'},'Orientation','vertical','Location','Best','Box','off','FontSize',8,'Units','Normalized');
     
-    xlabel(analysisPlotHandles.barPlot,'TrialTypes','fontsize',fontSizeVal,'fontweight','bold');
-    ylabel(analysisPlotHandles.barPlot,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');   
+%     xlabel(analysisPlotHandles.barPlot,'TrialTypes','fontsize',fontSizeVal,'fontweight','bold');
+%     ylabel(analysisPlotHandles.barPlot,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');   
     
     %---------------------------------------------------------------
     % Changing the figure and axes properties to make it nicer:
@@ -207,5 +237,5 @@ function biofeedbackFigure1(subjectName,folderName)
     % Changin the linewidth:
 %     set(findall(analysisPlotHandles.powerVsTime, 'Type', 'Line'),'LineWidth',2);
     set(findall(gcf, 'Type', 'errorbar'),'LineWidth',1.2);   
- 
+    set(hFreqVsTime,'linewidth',2.5);
 end
