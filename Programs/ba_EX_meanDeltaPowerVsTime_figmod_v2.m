@@ -16,7 +16,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
     if ~exist('folderName','var');          folderName='';                        end
     if ~exist('displayResultsFlag','var');  displayResultsFlag=1;                 end
     if ~exist('PlotH','var');               PlotH=[];                             end
-    if ~exist('fontSizeVal','var');         fontSizeVal = 12;                      end
+    if ~exist('fontSizeVal','var');         fontSizeVal = 12;                     end
     if ~exist('startTrialTimePos','var'),   startTrialTimePos = 13;               end %taking default value
     
     if isempty(folderName)
@@ -137,7 +137,32 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
                 %             trialPos = find(trialTypeList1D==i);
                 shortPosList = startTrialTimePos:60;
+                % Trialpositions from 13 to 60 are relavants; defining this
+                % as relavantTraialPos:
+                relevantTrialPos = trialTypeList1D(shortPosList);
+                % Making a new triallist where we would replace 2 and 3's
+                % as 0's. 
+                NewRelevantTrialPos = zeros(1,length(relevantTrialPos)); 
+                % Now assigning 0's and 1's:
+                for i=1:length(relevantTrialPos)
+                    if relevantTrialPos(i)==1
+                        NewRelevantTrialPos(i)=1;
+                    else 
+                        NewRelevantTrialPos(i)=0;
+                    end
+                end
+                
+                relevantTrialPos;
+                NewRelevantTrialPos  ;      
+                        
+%                 typeNameList{1} ='Valid';
+%                 typeNameList{2} ='Invalid';
+%                 typeNameList{3} ='Constant';
+                
                 trialPos     = shortPosList(trialTypeList1D(shortPosList)==i);
+                
+                %--- would change here:
+                
                 
                 %             if i==3 % no mod required
                 %                 titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos))]);
