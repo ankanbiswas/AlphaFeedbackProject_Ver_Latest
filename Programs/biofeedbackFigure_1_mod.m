@@ -1,6 +1,6 @@
 % Please comment out 85 to 99 for Matlab version 2015b or earlier
 
-function biofeedbackFigure1(subjectName,folderName)
+function biofeedbackFigure_1_mod(subjectName,subind)
     
     % Function to generate figure1
     % Input:
@@ -9,10 +9,10 @@ function biofeedbackFigure1(subjectName,folderName)
     
     % Generating figure and defining font properties:
     randomfigurenumber  = 100+randi(100);
-    figure(randomfigurenumber);
+%     figure(randomfigurenumber);
     fontSizeVal         = 12;
-    hFigure1            = gcf;
-%     hFigure1            = figure(1);
+    hFigure1            = figure(subind);
+    %     hFigure1            = figure(1);
     %     set(gcf,'Visible', 'off');
     
     %---------------------------------------------------------------
@@ -44,7 +44,7 @@ function biofeedbackFigure1(subjectName,folderName)
     %     hChInAlphaPowerVsTrialtypes = axes('Position', [0.8 0.5 0.15 0.2]); % position for  within the figure 2
     %     hChInAlphaPowerVsTrialtypes = axes('Position', [0.86 0.65 0.13 0.15]);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %-------------------------------------------------------------------------------------------------
     %%%%%%%%%%%%%%%%%%%%%% Subplot 1 (hExperimentFlow) %%%%%%%%%%%%%%%%%%%%
     
     dX = 1; dY = 1;
@@ -119,7 +119,7 @@ function biofeedbackFigure1(subjectName,folderName)
     
     freqVals    = analysisData.freqVals;
     timeValsTF  = analysisData.timeValsTF ;
-    timeValsTF  = timeValsTF+0.5; 
+    timeValsTF  = timeValsTF+0.5;
     stFreqList  = analysisData.stFreqList(6:end);
     
     %%%%% 2nd plot
@@ -161,7 +161,7 @@ function biofeedbackFigure1(subjectName,folderName)
     end
     %-------------------------------------------------------------------------------
     plot(hPowervsTime,timeValsTF(6:end),BoxCar_Alpha_deltaPowerVsTimeTMP(6:end),'--','LineWidth',2,'Color',[1.0000,0.2695,0]);
-    ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+    ylabel(hPowervsTime,'\Delta Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
     [hAx_hPowervsTime,hAlpha_deltaPowerVsTimeTMP,hstFreqList] = plotyy(hPowervsTime,timeValsTF(6:end),Alpha_deltaPowerVsTimeTMP(6:end),timeValsTF(6:end),stFreqList);
     ylabel(hAx_hPowervsTime(2),'Tone Frequency (Hz)')
     set(hAx_hPowervsTime(2),'fontsize',fontSizeVal,'fontweight','bold');
@@ -181,10 +181,10 @@ function biofeedbackFigure1(subjectName,folderName)
     xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
     hold(hPowervsTime,'off');
     %%%     title(hPowervsTime,'','fontsize',fontsize,'fontweight','bold');
-
-%--------------------------------------------------------------------------------
-%--------------------------------------------------------------------------------
-
+    
+    %--------------------------------------------------------------------------------
+    %--------------------------------------------------------------------------------
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%% Subplot 1.d(4) (hRawAlphaPowerVsTrials) %%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%  Subplot 1.e(5) (hChInAlphaPowerVsTime) %%%%%%%%%%
@@ -209,7 +209,7 @@ function biofeedbackFigure1(subjectName,folderName)
     xlim(analysisPlotHandles.powerVsTrial,[-1 61]);
     ylim(analysisPlotHandles.powerVsTrial,[-0.5 1.25]);
     xlabel(analysisPlotHandles.powerVsTrial,'TrialNo','fontsize',fontSizeVal,'fontweight','bold');
-    ylabel(analysisPlotHandles.powerVsTrial,'Raw Alpha Power (log(AlphaPower))','fontsize',fontSizeVal,'fontweight','bold');
+    ylabel(analysisPlotHandles.powerVsTrial,'Raw Alpha Power (log_{10}(\muV^{2})','fontsize',fontSizeVal,'fontweight','bold');
     %     xlabel(analysisPlotHandles.diffPowerVsTrial,'TrialNo');
     %     ylabel(analysisPlotHandles.diffPowerVsTrial,'\DeltaPower(dB)');
     %     title(['Subject',num2str(i)]);
@@ -227,7 +227,7 @@ function biofeedbackFigure1(subjectName,folderName)
     %---------------------------------------------------------------
     % Changing the figure and axes properties to make it nicer:
     
-    title(hExperimentFlow,['Subject No: ', '7']);
+    title(hExperimentFlow,['Participant No: ', num2str(subind)]);
     disp('one subject data analysis completed');
     
     % Changing axis properties of the figures:

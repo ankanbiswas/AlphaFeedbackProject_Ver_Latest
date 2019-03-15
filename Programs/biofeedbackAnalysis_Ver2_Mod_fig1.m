@@ -5,9 +5,10 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
     
     if ~exist('subjectName','var');         subjectName='';                 end
     if ~exist('folderName','var');          folderName='';                  end
-    if ~exist('displayResultsFlag','var');  displayResultsFlag=1;           end
-    if ~exist('analysisPlotHandles','var'); analysisPlotHandles=[];         end
+    if ~exist('displayResultsFlag','var');  displayResultsFlag  = 1;        end
+    if ~exist('analysisPlotHandles','var'); analysisPlotHandles = [];       end
     if ~exist('fontSizeVal','var');         fontSizeVal = 12;               end
+    if ~exist('startTrialTimePos','var');   startTrialTimePos = 13;         end
     
     if isempty(folderName)
         pathStr     = fileparts(pwd);
@@ -115,9 +116,28 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             %             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,semEyeOpenPowerList,'color','k','marker','o','linewidth',0.9);
             %             errorbar(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'color','k','marker','V','linewidth',0.9);
             hold(analysisPlotHandles.powerVsTime,'on');
-            plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,'color','k','linewidth',1.2);
-            plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,'color','k','linewidth',1.2);
-            plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color','k','linewidth',2);
+            %             plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeOpenPowerList,'-','color','y','linewidth',2);
+            %             plot(analysisPlotHandles.powerVsTrial,trialno,meanEyeClosedPowerList,'color',[1 0.4961 0.3125],'linewidth',2);
+            %------------ Regression for power vs eyes closed power:
+            lmPowerVsTrial_1 = fitlm(trialno(13:60),meanEyeOpenPowerList(13:60),'linear');
+            lmPowerVsTrial_2 = fitlm(trialno(13:60),meanEyeClosedPowerList(13:60),'linear');
+            text(0.18,0.98,'Eyes closed,','Color',[0.6445 0.1641 0.1641],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            text(0.68,0.98,['     p = ' num2str(lmPowerVsTrial_2.Coefficients{2,4},'%.3f')],'Color',[0.6445 0.1641 0.1641],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            %             text(0.67,0.96,['\beta_{2} = ' num2str(lmPowerVsTrial_2.Coefficients{2,1},'%.3f')],'Color',[0.6445 0.1641 0.1641],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            text(0.4,0.98,['    Slope = ' num2str(lmPowerVsTrial_2.Coefficients{2,1},'%.3f') ','],'Color',[0.6445 0.1641 0.1641],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            %             text(0.21,0.93,['p = ' num2str(lmPowerVsTrial_1.Coefficients{2,4},'%.3f')],'Color',[0.6602 0.6602 0.6602],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            %             text(0.1,0.98,['Slope = ' num2str(lmPowerVsTrial_1.Coefficients{2,1},'%.3f')],'Color',[0.6602 0.6602 0.6602],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            text(0.18,0.05,'Eyes open,','Color',[0.6602 0.6602 0.6602],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            text(0.68,0.05,['  p = ' num2str(lmPowerVsTrial_1.Coefficients{2,4},'%.3f')],'Color',[0.6602 0.6602 0.6602],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+            text(0.4,0.05,[' Slope = ' num2str(lmPowerVsTrial_1.Coefficients{2,1},'%.3f') ','],'Color',[0.6602 0.6602 0.6602],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTrial);
+
+            xfit = 13:1:60;
+%             xfit = min(trialno):1:max(trialno);
+            YFIT = lmPowerVsTrial_1.Coefficients{1,1} + lmPowerVsTrial_1.Coefficients{2,1}*xfit;
+            YFIT_2 = lmPowerVsTrial_2.Coefficients{1,1} + lmPowerVsTrial_2.Coefficients{2,1}*xfit;
+            plot(analysisPlotHandles.powerVsTrial,xfit,YFIT,'color',[0.6602 0.6602 0.6602],'linewidth',4);
+            plot(analysisPlotHandles.powerVsTrial,xfit,YFIT_2,'color',[0.6445 0.1641 0.1641],'linewidth',4);
+            plot(analysisPlotHandles.powerVsTrial,calibrationPowerList,'color',[0 0 0],'linewidth',2);
             
             % shadedErrorBar(trialno,meanEyeClosedPowerList,semEyeClosedPowerList,'-k',1);
             
@@ -125,23 +145,27 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
             %             hold(analysisPlotHandles.powerVsTime,'on');
             %             hold(analysisPlotHandles.barPlot,'on');
             for i=3:-1:1 % Trial Type
-                trialPos = find(trialTypeList1D==i);
-                if i==3
-                    titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos))]);
-                else
-                    titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos)) ', ']);
-                end
+                trialPosRawPower = find(trialTypeList1D==i);
+                shortPosList = startTrialTimePos:60;
+                trialPos = shortPosList(trialTypeList1D(shortPosList)==i);
+                
+                %                 if i==1
+                %                     titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos))]);
+                %                 else
+                %                     titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos)) ', ']);
+                %                 end
                 
                 if ~isempty(trialPos)
                     % Power versus Trial
-                    errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
-                    errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
+                    errorbar(analysisPlotHandles.powerVsTrial,trialPosRawPower,meanEyeOpenPowerList(trialPosRawPower),semEyeOpenPowerList(trialPosRawPower),'color',colorNames(i),'marker','o','linestyle','none','MarkerSize',8,'MarkerFaceColor','w');
+                    errorbar(analysisPlotHandles.powerVsTrial,trialPosRawPower,meanEyeClosedPowerList(trialPosRawPower),semEyeClosedPowerList(trialPosRawPower),'color',colorNames(i),'marker','V','linestyle','none','MarkerSize',8,'MarkerFaceColor',colorNames(i));
                     
                     % Change in Power versus Trial, separated by trialType
                     %                 deltaPower = meanEyeClosedPowerList(trialPos)-calibrationPowerList(trialPos);
-                    deltaPower = deltaPowerVsTimeList(trialPos,:);
-                    mean_deltaPower = mean(deltaPower,1);
-                    EX_mean_deltaPower = mean_deltaPower(21:50);
+                    deltaPower              = deltaPowerVsTimeList(trialPos,:);
+                    mean_deltaPower         = mean(deltaPower,1);
+                    EX_mean_deltaPower      = mean_deltaPower(21:50);
+                    sem_EX_mean_deltaPower  = std(EX_mean_deltaPower)/sqrt(length(EX_mean_deltaPower)); 
                     %                 errorbar(analysisPlotHandles.diffPowerVsTrial,deltaPower,semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V');
                     
                     % Power versus time
@@ -154,26 +178,73 @@ function [analysisPlotHandles,colorNames,meanEyeOpenPowerList,meanEyeClosedPower
                             % Fit a regression line using regress
                             % Report P value and r value of the regression
                             % line using text
-%                             meanAllSubmeanEyeOpenPowerList = mean(meanEyeOpenPowerList);
+                            %                             meanAllSubmeanEyeOpenPowerList = mean(meanEyeOpenPowerList);
                             timeAxis = 21:50;
-                            x = timeAxis';
-                            X = [ones(size(x)) x];
-                            y = EX_mean_deltaPower';
+                            x   = timeAxis';
+                            X   = [ones(size(x)) x];
+                            y   = EX_mean_deltaPower';
+                            lm  = fitlm(x,y,'linear');
                             [b,~,~,~,stats] = regress(y,X,0.01);
-%                             b = regress(y,X);
+                            %                             b = regress(y,X);
                             xfit = min(x):1:max(x);
-                            YFIT = b(1) + b(2)*xfit;
-                            p_value_regress = stats(1);
-                            r_value_regress = stats(3);
-%                             scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
-                            plot(analysisPlotHandles.powerVsTime,xfit,YFIT,'color',[0 0 0],'linewidth',4);
-                            text(0.7,0.3,['p = ' num2str(p_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
-                            text(0.7,0.25,['R^{2} = ' num2str(r_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
-                            text(0.8,0.95,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            YFIT = lm.Coefficients{1,1} + lm.Coefficients{2,1}*xfit;
+                            p_value_regress = stats(3);
+                            slope_value_regress = b(2);
+                            %                             scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
+                            plot(analysisPlotHandles.powerVsTime,xfit,YFIT,'color',colorNames(i),'linewidth',4);
+                            text(0.64,0.3,[' p = ' num2str(p_value_regress,'%.3f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            %                             text(0.7,0.25,['R^{2} = ' num2str(r_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.35,0.3,['Slope = ' num2str(slope_value_regress,'%.3f') ','],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+%                              text(0.7,0.36,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.7,0.95,[num2str(mean(EX_mean_deltaPower),'%.2f') '\pm' num2str(sem_EX_mean_deltaPower,'%.2f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
                         case 2
-                            text(0.8,0.9,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            timeAxis = 21:50;
+                            x   = timeAxis';
+                            X   = [ones(size(x)) x];
+                            y   = EX_mean_deltaPower';
+                            lm  = fitlm(x,y,'linear');
+                            [b,~,~,~,stats] = regress(y,X,0.01);
+                            %                             b = regress(y,X);
+                            xfit = min(x):1:max(x);
+                            YFIT = lm.Coefficients{1,1} + lm.Coefficients{2,1}*xfit;
+                            p_val_slope = lm.Coefficients{2,4};
+                            p_value_regress = stats(3);
+                            slope_value_regress = b(2);
+                            %                             scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
+                            plot(analysisPlotHandles.powerVsTime,xfit,YFIT,'color',colorNames(i),'linewidth',4);
+%                             disp(pval1);
+                            pval_pow = ceil(log10(p_value_regress))-1;
+                            pval_ini = p_val_slope*10^abs(pval_pow);
+                            text(0.64,0.23,[' p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+%                             text(0.7,0.23,[', p < 10^{' num2str(ceil(log10(p_val_slope))) '}'],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            %                             text(0.7,0.25,['R^{2} = ' num2str(r_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+%                             text(0.7,0.25,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.35,0.23,['Slope = ' num2str(slope_value_regress,'%.3f') ','],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.7,0.9,[num2str(mean(EX_mean_deltaPower),'%.2f') '\pm' num2str(sem_EX_mean_deltaPower,'%.2f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
                         case 3
-                            text(0.8,0.85,num2str(mean(EX_mean_deltaPower),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            timeAxis = 21:50;
+                            x   = timeAxis';
+                            X   = [ones(size(x)) x];
+                            y   = EX_mean_deltaPower';
+                            lm  = fitlm(x,y,'linear');
+                            [b,~,~,~,stats] = regress(y,X,0.01);
+                            %                             b = regress(y,X);
+                            xfit = min(x):1:max(x);
+                            YFIT = lm.Coefficients{1,1} + lm.Coefficients{2,1}*xfit;
+                            p_val_slope = lm.Coefficients{2,4};
+                            p_value_regress = stats(3);
+                            slope_value_regress = b(2);
+                            %                             scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
+                            plot(analysisPlotHandles.powerVsTime,xfit,YFIT,'color',colorNames(i),'linewidth',4);
+                             pval_pow = ceil(log10(p_value_regress))-1;
+                            pval_ini = p_val_slope*10^abs(pval_pow);
+                            text(0.64,0.16,[' p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);                         
+                            
+%                             text(0.7,0.16,[', p < 10^{' num2str(ceil(log10(p_val_slope))) '}'],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            %                             text(0.7,0.25,['R^{2} = ' num2str(r_value_regress,'%.3f')],'Color',[0,0,0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+%                             text(0.7,0.15,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.35,0.16,['Slope = ' num2str(slope_value_regress,'%.3f') ','],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
+                            text(0.7,0.85,[num2str(mean(EX_mean_deltaPower),'%.2f' ) '\pm' num2str(sem_EX_mean_deltaPower,'%.2f')],'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',analysisPlotHandles.powerVsTime);
                     end
                     
                     % Bar Plot

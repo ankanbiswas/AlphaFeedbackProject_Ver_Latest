@@ -1,7 +1,7 @@
 % Slope analysis of deltapowerVsTime for all the 24 subjects
 % SLope analysyed for time 20 to 40 seconds of the experiment duration
 
-function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFsVsDeltaPowerVsTime,fontsize)
+function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(~,hFsVsDeltaPowerVsTime,fontsize)
     % Initialization steps.
     % clc;        % Clear the command window
     % close all;  % Close all figures
@@ -9,13 +9,13 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFs
     
     % Load data
     load('EX_mean_deltaPowerVsTimeList_trialtypes.mat');
-%     FS = [4,8,7,5,8,3,9,10,10,7,10,8,10,10,9,10,9,9,9,9,10,10,8,10];
     FS = [4,8,7,5,8,3,9,10,10,7,10,8,10,10,9,10,9,9,9,1,9,10,10,8];
-    RS = [8,8,8,8,5,7,9,7, 8, 8,8, 8,8, 9, 8, 8,8,7,7,10,8,10,9,7];
+    RS = [8,8,8,8,5,7,9,7,8,8,8,8,8,9,8,8,8,7,7,10,8,10,9,7];
     DS = [2,5,3,5,2,5,1,1,1,9,1,8,1,1,1,4,1,5,2,1,6,1,1,1]; 
+    
     FS = FS';
     RS = RS';
-    DS = DS'; 
+    Ds = DS';
     % Getting size of the data matrices
     % [~, numConsTrials,~]                        = size(deltaPowerVsTimeList_constant);
     % [~, numInvalidTrials, ~]                    = size(deltaPowerVsTimeList_invalid);
@@ -100,7 +100,7 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFs
     end
     
     % plot the data, finally
-    hold(hdeltaSlopeVsSlopeInvalid,'on');
+%     hold(hdeltaSlopeVsSlopeInvalid,'on');
 %     grid(hdeltaSlopeVsSlopeInvalid,'on');
     
     %     scatterColor = flipud(jet(length(AllSubPower_InvalidTrials)));
@@ -109,24 +109,24 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFs
     %     [~,idx] = sort(slopeMatrix(:,1));
     %     slopeMatrixSorted = slopeMatrix(idx,:);
     
-    for i = 1:length(slopeMatrix)
-        %         if (slopeMatrixSorted(i,1) < 0) && (slopeMatrixSorted(i,2) > 0)
-        if i<7
-            %             scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),dotSize,'^','k','filled');
-            hold(hdeltaSlopeVsSlopeInvalid,'on');
-            %             scatter(slopeMatrix(i,1), slopeMatrix(i,2),80,'k^','filled');
-            %             plot([slopeMatrix(i,1); slopeMatrix(i,1)], [slopeMatrix(i,2)-SEM_AllSubdeltaPower_valid_M_invalid(i,1); slopeMatrix(i,2)+SEM_AllSubdeltaPower_valid_M_invalid(i,1)], 'k','MarkerSize' ,0.8);
-            errorbar(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'^k','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor','k');
-        else
-            %             scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),dotSize,'o','k','filled');
-            hold(hdeltaSlopeVsSlopeInvalid,'on');
-            %             scatter(slopeMatrix(i,1), slopeMatrix(i,2),80,'ko','filled');
-            %             plot([slopeMatrix(i,1); slopeMatrix(i,1)], [slopeMatrix(i,2)-SEM_AllSubdeltaPower_valid_M_invalid(i,1); slopeMatrix(i,2)+SEM_AllSubdeltaPower_valid_M_invalid(i,1)], 'k','MarkerSize' ,0.8);
-            errorbar(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'ok','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor','k');
-            %
-        end
-        hold(hdeltaSlopeVsSlopeInvalid,'on');
-    end
+%     for i = 1:length(slopeMatrix)
+%         %         if (slopeMatrixSorted(i,1) < 0) && (slopeMatrixSorted(i,2) > 0)
+%         if i<7
+%             %             scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),dotSize,'^','k','filled');
+% %             hold(hdeltaSlopeVsSlopeInvalid,'on');
+%             %             scatter(slopeMatrix(i,1), slopeMatrix(i,2),80,'k^','filled');
+%             %             plot([slopeMatrix(i,1); slopeMatrix(i,1)], [slopeMatrix(i,2)-SEM_AllSubdeltaPower_valid_M_invalid(i,1); slopeMatrix(i,2)+SEM_AllSubdeltaPower_valid_M_invalid(i,1)], 'k','MarkerSize' ,0.8);
+%             errorbar(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'^k','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor','k');
+%         else
+%             %             scatter(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),dotSize,'o','k','filled');
+%             hold(hdeltaSlopeVsSlopeInvalid,'on');
+%             %             scatter(slopeMatrix(i,1), slopeMatrix(i,2),80,'ko','filled');
+%             %             plot([slopeMatrix(i,1); slopeMatrix(i,1)], [slopeMatrix(i,2)-SEM_AllSubdeltaPower_valid_M_invalid(i,1); slopeMatrix(i,2)+SEM_AllSubdeltaPower_valid_M_invalid(i,1)], 'k','MarkerSize' ,0.8);
+%             errorbar(hdeltaSlopeVsSlopeInvalid,slopeMatrix(i,1),slopeMatrix(i,2),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'ok','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor','k');
+%             %
+%         end
+%         hold(hdeltaSlopeVsSlopeInvalid,'on');
+%     end
     %     legend(hdeltaSlopeVsSlopeInvalid,'slope');
     
     % Adding regression line:
@@ -143,26 +143,26 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFs
     %     p_value_regress = stats(1);
     %     r_value_regress = stats(3);
     
-    plot(hdeltaSlopeVsSlopeInvalid,xfit,YFIT,'color','k','linewidth',4);
-    text(0.75,0.81,['p < 10^{' num2str(ceil(log10(p_val_slope))) '}'],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
-    text(0.75,0.85,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
-    xlabel(hdeltaSlopeVsSlopeInvalid,'Constant Slope','fontsize',fontsize,'fontweight','bold');
-    ylabel(hdeltaSlopeVsSlopeInvalid,'\delta (Valid - Invalid) Power','fontsize',fontsize,'fontweight','bold');
+%     plot(hdeltaSlopeVsSlopeInvalid,xfit,YFIT,'color','k','linewidth',4);
+%     text(0.75,0.81,['p < 10^{' num2str(ceil(log10(p_val_slope))) '}'],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
+%     text(0.75,0.85,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
+%     xlabel(hdeltaSlopeVsSlopeInvalid,'Constant Slope','fontsize',fontsize,'fontweight','bold');
+%     ylabel(hdeltaSlopeVsSlopeInvalid,'\delta (Valid - Invalid) Power','fontsize',fontsize,'fontweight','bold');
     
-    x=linspace(-0.3,0.2,50) ;
-    y=linspace(0,0,50) ;
-    %     x2 = linspace(,0,50);
-    x2 = linspace(-1,4.5,50);
-    plot(hdeltaSlopeVsSlopeInvalid,x,y,'k--') ;
-    plot(hdeltaSlopeVsSlopeInvalid,y,x2,'k--') ;
-    xlim(hdeltaSlopeVsSlopeInvalid,[-0.3 0.15]);
-    ylim(hdeltaSlopeVsSlopeInvalid,[-1 4.5]);
+%     x=linspace(-0.3,0.2,50) ;
+%     y=linspace(0,0,50) ;
+%     %     x2 = linspace(,0,50);
+%     x2 = linspace(-1,4.5,50);
+%     plot(hdeltaSlopeVsSlopeInvalid,x,y,'k--') ;
+%     plot(hdeltaSlopeVsSlopeInvalid,y,x2,'k--') ;
+%     xlim(hdeltaSlopeVsSlopeInvalid,[-0.3 0.15]);
+%     ylim(hdeltaSlopeVsSlopeInvalid,[-1 4.5]);
     
-    hold(hdeltaSlopeVsSlopeInvalid,'off');
+%     hold(hdeltaSlopeVsSlopeInvalid,'off');
     hold(hFsVsDeltaPowerVsTime,'on');
     for i = 1:length(slopeMatrix)
         if i<7
-            errorbar(hFsVsDeltaPowerVsTime,FS(i,1),AllSubdeltaPower_valid_M_invalid(i,1),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'^k','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor',[0.6 0.6 0.6]);
+            errorbar(hFsVsDeltaPowerVsTime,FS(i,1),AllSubdeltaPower_valid_M_invalid(i,1),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'ok','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor',[0.6 0.6 0.6]);
         else
             errorbar(hFsVsDeltaPowerVsTime,FS(i,1),AllSubdeltaPower_valid_M_invalid(i,1),SEM_AllSubdeltaPower_valid_M_invalid(i,1),'ok','LineWidth',0.8,'MarkerSize',10,'MarkerFaceColor',[0.6 0.6 0.6]);
         end
@@ -186,6 +186,5 @@ function slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFs
     text(0.15,0.81,['p < 10^{' num2str(ceil(log10(p_val_slope))) '}'],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hFsVsDeltaPowerVsTime);
     text(0.15,0.85,['\beta_{1} = ' num2str(lm.Coefficients{2,1},'%.3f')],'Color','k','fontsize',fontsize,'fontweight','bold','unit','normalized','parent',hFsVsDeltaPowerVsTime);
     hold(hFsVsDeltaPowerVsTime,'off');
-    
-    save('SubjectiveScores.mat','FS','RS','DS','AllSubdeltaPower_valid_M_invalid','AllSub_sl_ConstantTrials');    
+ 
 end

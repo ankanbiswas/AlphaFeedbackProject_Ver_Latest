@@ -11,19 +11,22 @@
 
 fontsize        = 14;
 fontSizeVal     = 10;
-hfig4           = figure(4);
-hfig5           = figure(5);
+hfig4           = figure(5);
 
 % hdeltaSlopeVsSlopeInvalid = axes('parent',hfig4,'unit','normalized','Position',[0.17 0.15 0.68 0.8]);
-hdeltaSlopeVsSlopeInvalid = subplot(1,1,1,'parent',hfig4);
-hFsVsDeltaPowerVsTime     = subplot(1,3,1,'parent',hfig5);
+% hdeltaSlopeVsSlopeInvalid = subplot(1,2,1,'parent',hfig4);
+hFsVsDeltaPowerVsTime = subplot(1,3,1,'parent',hfig4);
+hRSVsDeltaPowerVsTime = subplot(1,3,2,'parent',hfig4);
+hDSVsDeltaPowerVsTime = subplot(1,3,3,'parent',hfig4);
+
+% hFsVsDeltaPowerVsTime     = subplot(1,2,2);
 % hdeltaSlopeVsSlopeInvalid = subplot(1,2,2);
 
 startTrialTimePos = 13; % default one
 
 % averageDeltaPowerVsTime(startTrialTimePos,hAverageDeltaPowerVsTime,fontsize);
 % slopeAnalysis_deltaSlopeVsSlopeInvalid(hdeltaSlopeVsSlopeInvalid,fontsize);
-slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFsVsDeltaPowerVsTime,fontsize);
+% slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFsVsDeltaPowerVsTime,fontsize);
 
 %--------------------------------------------------------------------------
 % Set axis properties
@@ -38,8 +41,8 @@ slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFsVsDeltaPo
 %     ,'ycolor',[0 0 0]...
 %     );
 
-text(0.75,0.9,'N = 24','Color','k','fontsize',fontsize,...
-    'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
+% text(0.75,0.9,'N = 24','Color','k','fontsize',fontsize,...
+%     'fontweight','bold','unit','normalized','parent',hdeltaSlopeVsSlopeInvalid);
 
 % hplot = hAverageDeltaPowerVsTime;
 % subplot(hplot);
@@ -68,6 +71,6 @@ set(findobj(gcf,'type','axes'),'box','off'...
     );
 
 % set(findall(gcf, 'Type', 'Line'),'LineWidth',2)
- text(-0.18,1.05,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hdeltaSlopeVsSlopeInvalid);
+%  text(-0.18,1.05,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hdeltaSlopeVsSlopeInvalid);
  text(-0.18,1.05,'B','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hFsVsDeltaPowerVsTime );
  set(gcf,'color','w');

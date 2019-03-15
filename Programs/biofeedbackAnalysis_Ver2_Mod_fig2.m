@@ -87,10 +87,10 @@ else
         
         calibrationPowerList   = cat(2,calibrationPowerList,meanCalibrationPower);
 %         powerVsTimeList        = cat(1,powerVsTimeList,powerVsTimeTMP);
-        meanEyeOpenPowerList   = cat(2,meanEyeOpenPowerList,meanEyeOpenPower);
-        semEyeOpenPowerList    = cat(2,semEyeOpenPowerList,semEyeOpenPower);
+        meanEyeOpenPowerList   = cat(2,meanEyeOpenPowerList,  meanEyeOpenPower);
+        semEyeOpenPowerList    = cat(2,semEyeOpenPowerList,   semEyeOpenPower);
         meanEyeClosedPowerList = cat(2,meanEyeClosedPowerList,meanEyeClosedPower);
-        semEyeClosedPowerList  = cat(2,semEyeClosedPowerList,semEyeClosedPower);
+        semEyeClosedPowerList  = cat(2,semEyeClosedPowerList, semEyeClosedPower);
     end
     
     timeVals = analysisData.timeValsTF;

@@ -8,7 +8,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
         trialTypeList1D,powerVsTimeList,deltaPowerVsTimeList,EX_mean_deltaPowerVsTimeList_valid,...
         EX_mean_deltaPowerVsTimeList_invalid,EX_mean_deltaPowerVsTimeList_constant,...
         timeVals,typeNameList,SubPValTemp]...
-        = ba_EX_meanDeltaPowerVsTime(subjectName,folderName,...
+        = ba_EX_meanDeltaPowerVsTime_figmod(subjectName,folderName,...
         displayResultsFlag,PlotH,startTrialTimePos,subInd)
     
     
@@ -16,7 +16,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
     if ~exist('folderName','var');          folderName='';                        end
     if ~exist('displayResultsFlag','var');  displayResultsFlag=1;                 end
     if ~exist('PlotH','var');               PlotH=[];                             end
-    if ~exist('fontSizeVal','var');         fontSizeVal = 8;                      end
+    if ~exist('fontSizeVal','var');         fontSizeVal = 12;                      end
     if ~exist('startTrialTimePos','var'),   startTrialTimePos = 13;               end %taking default value
     
     if isempty(folderName)
@@ -130,7 +130,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
             % Modify here to generate separate data matrix for delta power according to Trial types
-            
+%             h=[];
             for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
                 %             trialPos = find(trialTypeList1D==i);
                 shortPosList = startTrialTimePos:60;
@@ -153,7 +153,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     
                     % Power versus time
                     %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                    plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                   h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
                     %                   ylim(plotH_deltaPowerVsTime,[
                     %%%%%%%%%%% Calculate Report the average value using text at specified position %%%%
                     switch i
@@ -164,9 +164,9 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(timePosAnalysis);
                             %                         text(plotH_deltaPowerVsTime,30,1.6,num2str(mean(EX_mean_deltaPowerVsTimeList_valid)),'Color','red','FontSize',8);
                             if subInd == 1 || subInd == 4|| subInd == 5|| subInd == 2 || subInd == 9 || subInd == 17 || subInd == 21 
-                                text(0.05,0.9,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.71,0.3,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
                             hold(plotH_deltaPowerVsTime,'on');
                         case 2
@@ -174,10 +174,10 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             deltaPowerVsTimeList_invalid      = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_invalid = mean(deltaPowerVsTimeList_invalid,1);
                             EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(timePosAnalysis);
-                            if subInd == 1 || subInd == 4|| subInd == 5|| subInd == 2 || subInd == 9 || subInd == 17 || subInd == 21 
-                                text(0.05,0.8,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            if subInd == 3 || subInd == 8|| subInd == 12
+                                text(0.57,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.71,0.2,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.55,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
                         case 3
                             %                         disp('Trailtype: Constant');
@@ -185,9 +185,9 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             mean_deltaPowerVsTimeList_constant = mean(deltaPowerVsTimeList_constant,1);
                             EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(timePosAnalysis);
                             if subInd == 1 || subInd == 4|| subInd == 5|| subInd == 2 || subInd == 9 || subInd == 17 || subInd == 21 
-                                text(0.05,0.7,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.71,0.1,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
                             %                     otherwise
                     end
@@ -202,6 +202,11 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     
                     
                 end
+                
+            end
+            
+            if subInd == 6
+                legend([h(1) h(2) h(3)],{'Valid trial','Invalid trial','Constant trial',},'Orientation','horizontal','Box','on','FontSize',12,'Units','Normalized','Location','northoutside');
             end
             
             %%%%%%%%%%% Calculate and Report the p value between valid and invalid calucula%%%%
@@ -217,12 +222,16 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             %         end
             
             if subInd < 7
-                text(0.6,0.9,['p < 10^{' num2str(ceil(log10(pval1))) '}'],'color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                disp(pval1);
+                pval_pow = ceil(log10(pval1))-1;
+                pval_ini = pval1*10^abs(pval_pow);                
+                text(0.47,0.9,['p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             else
                 phVal = num2str(pval1,'%.3f');
-                text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                text(0.57,0.9,['p = ' phVal],'Color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             end
-            %              disp(pval1);
+            
+            %         disp(pval1);
             %         s1 = num2str(pval1,'%.3f'); s2 = ','; s3 = num2str(h);
             %         phVal = strcat(s1,s2,s3);
             %         text(0.9,0.9,phVal,'Color',[1 0.2695 0],'fontsize',10,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
@@ -245,5 +254,9 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
     else
         set(plotH_deltaPowerVsTime,'xticklabelmode','auto');
     end
-                        
+    
+%     if subInd ==6
+%         legend([h(1) h(2) h(3)],{'Valid trial','Invalid trial','Constant trial',},'Orientation','horizontal','Box','on','FontSize',10,'Units','Normalized','Location','northeast');
+%     end
+%                         
 end

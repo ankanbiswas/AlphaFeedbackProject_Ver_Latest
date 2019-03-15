@@ -11,11 +11,11 @@
 
 hfigure_2 = figure(102);
 haxfigure_2 = axes('parent',hfigure_2);
-hfigure_2.PaperType = 'a4';
-hfigure_2.PaperUnits = 'centimeters';
-hfigure_2.PaperSize = [18.3 24.7/2];
-hfigure_2.PaperOrientation = 'Portrait';
-hfigure_2.PaperPosition = [0 0 hfigure_2.PaperSize];
+% hfigure_2.PaperType = 'a4';
+% hfigure_2.PaperUnits = 'centimeters';
+% hfigure_2.PaperSize = [18.3 24.7/2];
+% hfigure_2.PaperOrientation = 'Portrait';
+% hfigure_2.PaperPosition = [0 0 hfigure_2.PaperSize];
 hfigure_2.Color = [1 1 1];
 fontsize = 12;
 startTrialTimePos = 13; % default one
@@ -26,10 +26,10 @@ startTrialTimePos = 13; % default one
 %                 'ARC','TBR','BPP','SL','PK',...
 %                 'PB','PM','SKH','AD'}';
 subjectNames = {'ABA','ARC','DD','AJ','SG',...
-    'MP','PB','SSA','SL','DB', ...
-    'PK','HS','AD','SB','SKS','SS',...
-    'SHG','KNB','BPP','SSH',...
-    'MJR','TBR','SKH','PM'}';
+                'MP','PB','SSA','SL','DB', ...
+                'PK','HS','AD','SB','SKS','SS',...
+                'SHG','KNB','BPP','SSH',...
+                'MJR','TBR','SKH','PM'}';
 
 numSubjects = length(subjectNames); % no of subjects for which analysis would be carried out
 numSubList = 1:numSubjects;
@@ -43,7 +43,7 @@ numSubList = numSubList';
 %     h = getPlotHandles(ceil(numSubjects/6),6);
 % end
 
-h = getPlotHandles(4,6,[0.06 0.07 0.9 0.9],0.02,0.02);
+h = getPlotHandles(4,6,[0.06 0.1 0.9 0.83],0.02,0.02);
 h2 = h';
 h3 = h2(:);
 
@@ -66,8 +66,12 @@ for i=1:numSubjects
     %     h= figure(i);
     %     set(h, 'Visible', 'on'); % Control visibility of the figure
     
+%     [plotH,colorNames,~,~,~,~,~,~,~,~,~,timeVals,typeNameList,SubPValTemp] ...
+%         = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH,startTrialTimePos,subInd);
+    
     [plotH,colorNames,~,~,~,~,~,~,~,~,~,timeVals,typeNameList,SubPValTemp] ...
-        = ba_EX_meanDeltaPowerVsTime(subjectNames{subInd},'',1,plotH,startTrialTimePos,subInd);
+        = ba_EX_meanDeltaPowerVsTime_figmod(subjectNames{subInd},'',1,plotH,startTrialTimePos,subInd);
+    
     %     flag;
     
     %%%% Changing plot properties
@@ -77,11 +81,11 @@ for i=1:numSubjects
     %     ylim(plotH.deltaPowerVsTime,[-0.5 1.8]);
     xlim(plotH.deltaPowerVsTime,[5 52]);
     
-    if numSubjects <= 6 || subInd >= 19
-        xlabel(plotH.deltaPowerVsTime,'Time (s)','fontsize',fontsize,'fontweight','bold');
+    if subInd == 19
+        xlabel(plotH.deltaPowerVsTime,'Time (s)','fontsize',30,'fontweight','bold');
     end
-    if  subInd == 1 || subInd == 7 || subInd == 13 || subInd == 19
-        ylabel(plotH.deltaPowerVsTime,'\DeltaPower(dB)','fontsize',fontsize,'fontweight','bold');
+    if  subInd == 19
+        ylabel(plotH.deltaPowerVsTime,'\Delta Alpha power (dB)','fontsize',30,'fontweight','bold');
     else
         set(plotH.deltaPowerVsTime,'yticklabel',[]);
     end
@@ -91,7 +95,7 @@ for i=1:numSubjects
 end
 
 set(findobj(gcf,'type','axes'),'box','off'...
-    ,'fontsize',fontsize...
+    ,'fontsize',14 ...
     ,'FontWeight','Bold'...
     ,'TickDir','out'...
     ,'TickLength',[0.02 0.02]...

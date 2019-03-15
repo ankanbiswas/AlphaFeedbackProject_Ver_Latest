@@ -1,4 +1,4 @@
-% biofeedbackFigure4(subjectName,folderName)
+ % biofeedbackFigure4(subjectName,folderName)
 % Main aim of the code is to plot
 %          1. meanDeltaPowerVsTime 
 %          2. deltaPowerVsSlope
@@ -9,21 +9,26 @@
 
 % trialtypes: Valid: 1, Invalid: 2, Constant: 3;
 
-fontsize        = 14;
-fontSizeVal     = 10;
-hfig4           = figure(4);
-hfig5           = figure(5);
+fontsize        = 15;
+fontSizeVal     = 15;
+hfig4           = figure(3);
+set(hfig4,'color','w');
+hfig5           = figure(4);
 
 % hdeltaSlopeVsSlopeInvalid = axes('parent',hfig4,'unit','normalized','Position',[0.17 0.15 0.68 0.8]);
-hdeltaSlopeVsSlopeInvalid = subplot(1,1,1,'parent',hfig4);
-hFsVsDeltaPowerVsTime     = subplot(1,3,1,'parent',hfig5);
+% hdeltaSlopeVsSlopeInvalid = subplot(1,1,1,'parent',hfig4);
+hdeltaSlopeVsSlopeInvalid = subplot('Position',[0.12  0.15 0.8 0.8],'unit','normalized','parent',hfig4);
+hFSVsDeltaPowerVsTime     = subplot('Position',[0.09  0.12 0.25 0.8],'unit','normalized','parent',hfig5);
+hRSVSDeltaPowerVsTime     = subplot('Position',[0.4 0.12 0.25 0.8],'unit','normalized','parent',hfig5);
+hDSVSDeltaPowerVsTime     = subplot('Position',[0.71 0.12 0.24 0.8],'unit','normalized','parent',hfig5);
+
 % hdeltaSlopeVsSlopeInvalid = subplot(1,2,2);
 
 startTrialTimePos = 13; % default one
 
 % averageDeltaPowerVsTime(startTrialTimePos,hAverageDeltaPowerVsTime,fontsize);
 % slopeAnalysis_deltaSlopeVsSlopeInvalid(hdeltaSlopeVsSlopeInvalid,fontsize);
-slopeAnalysis_deltaSlopeVsSlopeInvalid_v2(hdeltaSlopeVsSlopeInvalid,hFsVsDeltaPowerVsTime,fontsize);
+slopeAnalysis_deltaSlopeVsSlopeInvalid_v3(hdeltaSlopeVsSlopeInvalid,hFSVsDeltaPowerVsTime,hRSVSDeltaPowerVsTime,hDSVSDeltaPowerVsTime,fontsize);
 
 %--------------------------------------------------------------------------
 % Set axis properties
@@ -56,7 +61,16 @@ text(0.75,0.9,'N = 24','Color','k','fontsize',fontsize,...
 % load('Sorted_subjectFeedbackMatrix.mat');
 
 text(0.15,0.9,'N = 24','Color','k','fontsize',fontsize,...
-    'fontweight','bold','unit','normalized','parent',hFsVsDeltaPowerVsTime);
+    'fontweight','bold','unit','normalized','parent',hFSVsDeltaPowerVsTime);
+set(hdeltaSlopeVsSlopeInvalid,'box','off'...
+    ,'fontsize',fontsize...
+    ,'FontWeight','Bold'...
+    ,'TickDir','out'...
+    ,'TickLength',[0.02 0.02]...
+    ,'linewidth',1.5 ...
+    ,'xcolor',[0 0 0]...
+    ,'ycolor',[0 0 0]...
+    );
 set(findobj(gcf,'type','axes'),'box','off'...
     ,'fontsize',fontsize...
     ,'FontWeight','Bold'...
@@ -68,6 +82,8 @@ set(findobj(gcf,'type','axes'),'box','off'...
     );
 
 % set(findall(gcf, 'Type', 'Line'),'LineWidth',2)
- text(-0.18,1.05,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hdeltaSlopeVsSlopeInvalid);
- text(-0.18,1.05,'B','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hFsVsDeltaPowerVsTime );
- set(gcf,'color','w');
+%  text(-0.18,1.05,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hdeltaSlopeVsSlopeInvalid);
+text(-0.18,1.05,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hFSVsDeltaPowerVsTime );
+text(-0.18,1.05,'B','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hRSVSDeltaPowerVsTime );
+text(-0.18,1.05,'C','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hDSVSDeltaPowerVsTime );
+set(gcf,'color','w');

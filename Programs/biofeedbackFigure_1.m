@@ -1,8 +1,10 @@
 % Please comment out 85 to 99 for Matlab version 2015b or earlier
 
-function biofeedbackFigure1(subjectName,folderName)
+%% Put a hold on 165 line to calcualte cross correlation
+
+function biofeedbackFigure_1(subjectName,folderName)
     
-    % Function to generate figure1
+    % Function to generate figure1s
     % Input:
     % Subject name as string
     % foldername (optional)
@@ -12,7 +14,7 @@ function biofeedbackFigure1(subjectName,folderName)
     figure(randomfigurenumber);
     fontSizeVal         = 12;
     hFigure1            = gcf;
-%     hFigure1            = figure(1);
+    %     hFigure1            = figure(1);
     %     set(gcf,'Visible', 'off');
     
     %---------------------------------------------------------------
@@ -44,7 +46,7 @@ function biofeedbackFigure1(subjectName,folderName)
     %     hChInAlphaPowerVsTrialtypes = axes('Position', [0.8 0.5 0.15 0.2]); % position for  within the figure 2
     %     hChInAlphaPowerVsTrialtypes = axes('Position', [0.86 0.65 0.13 0.15]);
     
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %-------------------------------------------------------------------------------------------------
     %%%%%%%%%%%%%%%%%%%%%% Subplot 1 (hExperimentFlow) %%%%%%%%%%%%%%%%%%%%
     
     dX = 1; dY = 1;
@@ -67,18 +69,18 @@ function biofeedbackFigure1(subjectName,folderName)
         patch(patchLocX,patchLocY,colorNameTypes(i),'parent',hExperimentFlow,'EdgeColor','k');
     end
     
-    xlim(hExperimentFlow,[1,61]);  ylim(hExperimentFlow,[-2,2]);  xlabel(hExperimentFlow,'Trial No','FontSize',12,'FontWeight','bold','Color','k');
+    xlim(hExperimentFlow,[1,61]);  ylim(hExperimentFlow,[-2,2]);  xlabel(hExperimentFlow,'Trial number','FontSize',12,'FontWeight','bold','Color','k');
     set(hExperimentFlow,'Ytick',[]);
     set(hExperimentFlow,'Ycolor',[1 1 1]);  % Making yaxis invisible
     hExperimentFlow_xTickVal = linspace(0,60,6)+1;
     set(hExperimentFlow,'Xtick',hExperimentFlow_xTickVal);
     set(hExperimentFlow,'xticklabels',{'0','12','24','36','48','60'});
     
-    text(0.06,-0.6,'First Session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
-    text(0.06+0.2,-0.6,'Second Session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
-    text(0.06+0.4,-0.6,'Third Session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
-    text(0.06+0.6,-0.6,'Fourth Session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
-    text(0.06+0.8,-0.6,'Fifth Session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
+    text(0.06,-0.6,'First session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
+    text(0.06+0.2,-0.6,'Second session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
+    text(0.06+0.4,-0.6,'Third session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
+    text(0.06+0.6,-0.6,'Fourth session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
+    text(0.06+0.8,-0.6,'Fifth session','Color','k','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',hExperimentFlow);
     Xlabel_pos = get(get(hExperimentFlow, 'XLabel'), 'Position');
     set(get(hExperimentFlow, 'XLabel'), 'Position', Xlabel_pos + [0 -1 0]);
     hold(hExperimentFlow,'off');
@@ -87,7 +89,7 @@ function biofeedbackFigure1(subjectName,folderName)
     rectangle(gca,'Position',[0 0 0.1 0.1],'FaceColor','r','EdgeColor','r',...
         'LineWidth',1); axis(gca,'equal'); set(gca,'Visible','off');
     text(gca,0.84,0.65,'Valid','Units','Normalized','fontsize',fontSizeVal,'fontweight','bold');
-    text(gca,-2.7,0.6,'Trial Types:','Units','Normalized','fontsize',fontSizeVal+2,'fontweight','bold');
+    text(gca,-2.7,0.6,'Trial types:','Units','Normalized','fontsize',fontSizeVal+2,'fontweight','bold');
     hInValidText    = getPlotHandles(1,1,[0.82 0.95 0.04 0.02]);
     rectangle(gca,'Position',[0 0 0.1 0.1],'FaceColor','g','EdgeColor','g',...
         'LineWidth',1); axis(gca,'equal'); set(gca,'Visible','off');
@@ -119,7 +121,7 @@ function biofeedbackFigure1(subjectName,folderName)
     
     freqVals    = analysisData.freqVals;
     timeValsTF  = analysisData.timeValsTF ;
-    timeValsTF  = timeValsTF+0.5; 
+    timeValsTF  = timeValsTF+0.5;
     stFreqList  = analysisData.stFreqList(6:end);
     
     %%%%% 2nd plot
@@ -160,10 +162,10 @@ function biofeedbackFigure1(subjectName,folderName)
         timeStartS = timeStartS+1;
     end
     %-------------------------------------------------------------------------------
-    plot(hPowervsTime,timeValsTF(6:end),BoxCar_Alpha_deltaPowerVsTimeTMP(6:end),'--','LineWidth',2,'Color',[1.0000,0.2695,0]);
-    ylabel(hPowervsTime,'Change In Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+    
+    ylabel(hPowervsTime,'\Delta Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
     [hAx_hPowervsTime,hAlpha_deltaPowerVsTimeTMP,hstFreqList] = plotyy(hPowervsTime,timeValsTF(6:end),Alpha_deltaPowerVsTimeTMP(6:end),timeValsTF(6:end),stFreqList);
-    ylabel(hAx_hPowervsTime(2),'Tone Frequency (Hz)')
+     ylabel(hAx_hPowervsTime(2),'Tone frequency (Hz)')
     set(hAx_hPowervsTime(2),'fontsize',fontSizeVal,'fontweight','bold');
     set(hAlpha_deltaPowerVsTimeTMP,'linewidth',2,'Color',[0.5430 0 0]);
     set(hAx_hPowervsTime(1),'YColor',[0.5430 0 0]);
@@ -177,14 +179,16 @@ function biofeedbackFigure1(subjectName,folderName)
     %     ylabel(gca,'Tone Frequency (Hz)','fontsize',fontSizeVal,'fontweight','bold');
     xlim(hPowervsTime,[5 50]);
     %      legend({'Smoothed Alpha Power','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Position',[0.001,0.33,0.2,0.05]);
-    legend({'Smoothed Alpha Power','Alpha Power','Frequency'},'Orientation','vertical','Box','off','FontSize',8,'Units','Normalized','Location','southeast');
+    h_smoothed_Alpha = plot(hPowervsTime,timeValsTF(6:end),BoxCar_Alpha_deltaPowerVsTimeTMP(6:end),'--','LineWidth',2,'Color',[1.0000,0.2695,0]);
+    legend({'Alpha power','Smoothed alpha power','Tone frequency'},'Orientation','vertical','Box','off','FontSize',9,'Units','Normalized','Location','southeast');
     xlabel(hPowervsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
     hold(hPowervsTime,'off');
+    
     %%%     title(hPowervsTime,'','fontsize',fontsize,'fontweight','bold');
-
-%--------------------------------------------------------------------------------
-%--------------------------------------------------------------------------------
-
+    
+    %--------------------------------------------------------------------------------
+    %--------------------------------------------------------------------------------
+    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%% Subplot 1.d(4) (hRawAlphaPowerVsTrials) %%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%  Subplot 1.e(5) (hChInAlphaPowerVsTime) %%%%%%%%%%
@@ -208,8 +212,8 @@ function biofeedbackFigure1(subjectName,folderName)
     %     set(analysisPlotHandles.barPlot,'XTick',1:3,'XTickLabel',typeNameList);
     xlim(analysisPlotHandles.powerVsTrial,[-1 61]);
     ylim(analysisPlotHandles.powerVsTrial,[-0.5 1.25]);
-    xlabel(analysisPlotHandles.powerVsTrial,'TrialNo','fontsize',fontSizeVal,'fontweight','bold');
-    ylabel(analysisPlotHandles.powerVsTrial,'Raw Alpha Power (log(AlphaPower))','fontsize',fontSizeVal,'fontweight','bold');
+    xlabel(analysisPlotHandles.powerVsTrial,'Trial number','fontsize',fontSizeVal,'fontweight','bold');
+    ylabel(analysisPlotHandles.powerVsTrial,'Raw alpha power (log_{10}(\muV^{2}))','fontsize',fontSizeVal,'fontweight','bold');
     %     xlabel(analysisPlotHandles.diffPowerVsTrial,'TrialNo');
     %     ylabel(analysisPlotHandles.diffPowerVsTrial,'\DeltaPower(dB)');
     %     title(['Subject',num2str(i)]);
@@ -218,7 +222,7 @@ function biofeedbackFigure1(subjectName,folderName)
     xlim(analysisPlotHandles.powerVsTime,[5 51]);
     ylim(analysisPlotHandles.powerVsTime,[-1 12]);
     xlabel(analysisPlotHandles.powerVsTime,'Time (s)','fontsize',fontSizeVal,'fontweight','bold');
-    ylabel(analysisPlotHandles.powerVsTime,'\Delta Alpha Power (dB)','fontsize',fontSizeVal,'fontweight','bold');
+    ylabel(analysisPlotHandles.powerVsTime,'\Delta Alpha power (dB)','fontsize',fontSizeVal,'fontweight','bold');
     %     legend(analysisPlotHandles.powerVsTime,{'RawPower','Alpha Power','Frequency'},'Orientation','vertical','Location','Best','Box','off','FontSize',8,'Units','Normalized');
     
     %     xlabel(analysisPlotHandles.barPlot,'TrialTypes','fontsize',fontSizeVal,'fontweight','bold');
@@ -227,7 +231,7 @@ function biofeedbackFigure1(subjectName,folderName)
     %---------------------------------------------------------------
     % Changing the figure and axes properties to make it nicer:
     
-    title(hExperimentFlow,['Subject No: ', '7']);
+%     title(hExperimentFlow,['Participant No: ', '7']);
     disp('one subject data analysis completed');
     
     % Changing axis properties of the figures:
@@ -251,7 +255,7 @@ function biofeedbackFigure1(subjectName,folderName)
     %------------------------------- New addition: panel number %-------
     
     text(-0.041,0.95,'A','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hExperimentFlow);
-    text(-0.13,1.40, 'B','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hFreqVsTime );
+    text(-0.13,1.52, 'B','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hFreqVsTime );
     text(-0.14,1,    'C','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',hPowervsTime );
     text(-0.15,1.05, 'D','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',analysisPlotHandles.powerVsTrial );
     text(-0.15,1.05, 'E','Units','Normalized','fontsize',fontSizeVal+5,'fontweight','bold','Parent',analysisPlotHandles.powerVsTime );

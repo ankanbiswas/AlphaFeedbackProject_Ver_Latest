@@ -30,10 +30,17 @@ function biofeedbackFigure2
 %     ylabel(hNoOfSubjectsVsSlopeValues_EyesClosed,'Slope Values','fontsize',fontsize,'fontweight','bold');
   
     % list of subjects
-    subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS','KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL','PK','PB','PM','SKH','AD'};
+%     subjectNames = {'ABA','AJ','DB','DD','HS','SB','SG','SS','SSH','SKS','KNB','SSA','SHG','MP','MJR','ARC','TBR','BPP','SL','PK','PB','PM','SKH','AD'};
+    
+    subjectNames = {'ABA','ARC','DD','AJ','SG',...
+                    'MP','PB','SSA','SL','DB', ...
+                    'PK','HS','AD','SB','SKS','SS',...
+                    'SHG','KNB','BPP','SSH',...
+                    'MJR','TBR','SKH','PM'}';
+            
     numSubjects  = length(subjectNames);
     hold(hRawPowerVsTrials,'on');
-    trialaxis = 1:60;
+    trialaxis = 13:60;
     AllSubEyeOpenSlope = [];
     AllSubEyeCloseSlope = [];
     
@@ -52,6 +59,7 @@ function biofeedbackFigure2
         x = trialaxis';
         X = [ones(size(x)) x];
         y = meanEyeOpenPowerList(i,:)';
+        y = y(13:60);
         b = regress(y,X);
         xfit = min(x):1:max(x);
         YFIT = b(1) + b(2)*xfit;
@@ -64,6 +72,7 @@ function biofeedbackFigure2
         x2 = trialaxis';
         X2 = [ones(size(x2)) x2];
         y2 = meanEyeClosedPowerList(i,:)';
+        y2 = y2(13:60);
         b2 = regress(y2,X2);
         xfit2 = min(x2):1:max(x2);
         YFIT2 = b2(1) + b2(2)*xfit2;
@@ -75,24 +84,28 @@ function biofeedbackFigure2
     
      %%%%% ploting mean eye open data and regression line %%%%
     
+    %------------------------------------------------------------------------
      %%% mean regression for eyesOpenPower
     meanAllSubmeanEyeOpenPowerList = mean(meanEyeOpenPowerList);
     x = trialaxis';
     X = [ones(size(x)) x];
     y = meanAllSubmeanEyeOpenPowerList';
+    y = y(13:60);
     b = regress(y,X);
     xfit = min(x):1:max(x);
     YFIT = b(1) + b(2)*xfit;
     
-    scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,:),'.','k')
+    scatter(hRawPowerVsTrials,trialaxis,meanEyeClosedPowerList(i,13:60),'.','k')
     plot(hRawPowerVsTrials,xfit,YFIT,'color',[0 0 0],'linewidth',4);
     
+    %------------------------------------------------------------------------
     %%% mean regression for eyesClosePower
     
     meanAllSubmeanEyeClosePowerList = mean(meanEyeClosedPowerList);
     x = trialaxis';
     X = [ones(size(x)) x];
     y = meanAllSubmeanEyeClosePowerList';
+    y = y(13:60);
     b = regress(y,X);
     xfit = min(x):1:max(x);
     YFIT = b(1) + b(2)*xfit;
@@ -115,5 +128,5 @@ function biofeedbackFigure2
     title('Eyes Closed');
     ylabel(hNoOfSubjectsVsSlopeValues_EyesClosed,'No Of Subjects','fontsize',fontsize,'fontweight','bold');
     xlabel(hNoOfSubjectsVsSlopeValues_EyesClosed,'Slope Values','fontsize',fontsize,'fontweight','bold');
-           
+    flag;      
 end
