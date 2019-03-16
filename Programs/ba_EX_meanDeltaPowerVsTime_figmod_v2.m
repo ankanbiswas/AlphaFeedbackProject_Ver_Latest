@@ -4,12 +4,13 @@
 % Input - subjectName: A string to identify the subject.
 
 function [PlotH,colorNames,meanEyeOpenPowerList,...
-        meanEyeClosedPowerList,calibrationPowerList, ...
-        trialTypeList1D,powerVsTimeList,deltaPowerVsTimeList,EX_mean_deltaPowerVsTimeList_valid,...
-        EX_mean_deltaPowerVsTimeList_invalid,EX_mean_deltaPowerVsTimeList_constant,...
-        timeVals,typeNameList,SubPValTemp]...
-        = ba_EX_meanDeltaPowerVsTime_figmod_v2(subjectName,folderName,...
-        displayResultsFlag,PlotH,startTrialTimePos,subInd)
+            meanEyeClosedPowerList,calibrationPowerList, ...
+            trialTypeList1D,powerVsTimeList,deltaPowerVsTimeList,EX_mean_deltaPowerVsTimeList_valid,...
+            EX_mean_deltaPowerVsTimeList_invalid,EX_mean_deltaPowerVsTimeList_constant,...
+            timeVals,typeNameList,SubPValTemp]...
+            =   ba_EX_meanDeltaPowerVsTime_figmod_v2 ...
+                    (subjectName,folderName,...
+                    displayResultsFlag,PlotH,startTrialTimePos,subInd)
     
     
     if ~exist('subjectName','var');         subjectName='';                       end
@@ -130,20 +131,21 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             %         hold(PlotH,'on');
             %         hold(analysisPlotHandles.barPlot,'on');
             
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-            % Modify here to generate separate data matrix for delta power according to Trial types
-%             h=[];
-            for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
-                %             trialPos = find(trialTypeList1D==i);
-                shortPosList = startTrialTimePos:60;
                 % Trialpositions from 13 to 60 are relavants; defining this
                 % as relavantTraialPos:
+                
+                shortPosList = startTrialTimePos:60;
                 relevantTrialPos = trialTypeList1D(shortPosList);
+                
                 % Making a new triallist where we would replace 2 and 3's
                 % as 0's. 
+                
                 NewRelevantTrialPos = zeros(1,length(relevantTrialPos)); 
+                
                 % Now assigning 0's and 1's:
+                
                 for i=1:length(relevantTrialPos)
                     if relevantTrialPos(i)==1
                         NewRelevantTrialPos(i)=1;
@@ -152,16 +154,33 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     end
                 end
                 
-                relevantTrialPos;
-                NewRelevantTrialPos  ;      
-                        
-%                 typeNameList{1} ='Valid';
-%                 typeNameList{2} ='Invalid';
-%                 typeNameList{3} ='Constant';
+                % Now separating out three different trial-types from
+                % NewRelevantTrialPos:
                 
-                trialPos     = shortPosList(trialTypeList1D(shortPosList)==i);
+                % Defining first, second and third trialtypes:
+                    % First:  Trials preceded  by valid(1) trials.
+                    % Second: Trials preceded by invalid or constant(0) trial types.
+                    % Third:  Trials preceeded by more than one valid trials.
                 
-                %--- would change here:
+                [First_catTrialPos,Second_catTrialPos,Third_catTrialPos] = biofeedbackValidSeparateTrialPos(NewRelevantTrialPos,0);                
+                  
+                % Now would check whether the sorting is right or not::::
+                % Done -> Its right only. 
+                
+                % Now lets plot only for valid trials for each subjects: 
+                
+                
+             
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%           
+            % Modify here to generate separate data matrix for delta power according to Trial types
+%             h=[];
+            for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
+                %             trialPos = find(trialTypeList1D==i);
+%                 shortPosList = startTrialTimePos:60; % this now becomes redundant -> commenting out. 
+                
+                % Now would three different trials: 
+                
+%                 trialPos     = shortPosList(trialTypeList1D(shortPosList)==i);
                 
                 
                 %             if i==3 % no mod required
@@ -170,7 +189,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                 %                 titleStr = cat(2,titleStr,[typeNameList{i} '=' num2str(length(trialPos)) ', ']);
                 %             end
                 
-                if ~isempty(trialPos)
+%                 if ~isempty(NewRelevantTrialPos)
                     % Power versus Trial
                     %                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeOpenPowerList(trialPos),semEyeOpenPowerList(trialPos),'color',colorNames(i),'marker','o','linestyle','none');
                     %                 errorbar(analysisPlotHandles.powerVsTrial,trialPos,meanEyeClosedPowerList(trialPos),semEyeClosedPowerList(trialPos),'color',colorNames(i),'marker','V','linestyle','none');
@@ -181,12 +200,14 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     
                     % Power versus time
                     %                 plot(analysisPlotHandles.powerVsTime,analysisData.timeValsTF,mean(powerVsTimeList(trialPos,:),1),'color',colorNames(i));
-                   h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+%                    h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
                     %                   ylim(plotH_deltaPowerVsTime,[
                     %%%%%%%%%%% Calculate Report the average value using text at specified position %%%%
                     switch i
                         case 1
                             %                         disp('Trialtype: Valid');
+                            trialPos     = First_catTrialPos;
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
                             deltaPowerVsTimeList_valid      = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_valid = mean(deltaPowerVsTimeList_valid,1);
                             EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(timePosAnalysis);
@@ -199,6 +220,8 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             hold(plotH_deltaPowerVsTime,'on');
                         case 2
                             %                         disp('Traialtype: Invalid');
+                            trialPos     = Second_catTrialPos;
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
                             deltaPowerVsTimeList_invalid      = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_invalid = mean(deltaPowerVsTimeList_invalid,1);
                             EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(timePosAnalysis);
@@ -209,6 +232,8 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             end
                         case 3
                             %                         disp('Trailtype: Constant');
+                            trialPos     = Third_catTrialPos;
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
                             deltaPowerVsTimeList_constant = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_constant = mean(deltaPowerVsTimeList_constant,1);
                             EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(timePosAnalysis);
@@ -229,12 +254,12 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     %                 disp(mean(deltaPower));
                     
                     
-                end
+%                 end
                 
             end
             
             if subInd == 6
-                legend([h(1) h(2) h(3)],{'Valid trial','Invalid trial','Constant trial',},'Orientation','horizontal','Box','on','FontSize',12,'Units','Normalized','Location','northoutside');
+                legend([h(1) h(2) h(3)],{'Valid Type 1','Valid Type 2','Valid Type 3',},'Orientation','horizontal','Box','on','FontSize',12,'Units','Normalized','Location','northoutside');
             end
             
             %%%%%%%%%%% Calculate and Report the p value between valid and invalid calucula%%%%
