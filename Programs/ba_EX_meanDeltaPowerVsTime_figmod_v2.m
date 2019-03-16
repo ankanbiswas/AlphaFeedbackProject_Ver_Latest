@@ -274,14 +274,16 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             %             text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             %         end
             
+            %---------------------- p-value is indicated here --------%
+            
             if subInd < 7
                 disp(pval1);
                 pval_pow = ceil(log10(pval1))-1;
                 pval_ini = pval1*10^abs(pval_pow);                
-                text(0.47,0.9,['p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+%                 text(0.47,0.9,['p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             else
                 phVal = num2str(pval1,'%.3f');
-                text(0.57,0.9,['p = ' phVal],'Color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+%                 text(0.57,0.9,['p = ' phVal],'Color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             end
             
             %         disp(pval1);
