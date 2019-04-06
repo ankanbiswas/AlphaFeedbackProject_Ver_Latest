@@ -162,7 +162,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     % Second: Trials preceded by invalid or constant(0) trial types.
                     % Third:  Trials preceeded by more than one valid trials.
                 
-                [First_catTrialPos,Second_catTrialPos,Third_catTrialPos] = biofeedbackValidSeparateTrialPos(NewRelevantTrialPos,0);                
+                [First_catTrialPos,Second_catTrialPos,Third_catTrialPos] = biofeedbackValidSeparateTrialPos(NewRelevantTrialPos,1);                
                   
                 % Now would check whether the sorting is right or not::::
                 % Done -> Its right only. 
@@ -174,7 +174,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%           
             % Modify here to generate separate data matrix for delta power according to Trial types
 %             h=[];
-            for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
+            for i=4:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
                 %             trialPos = find(trialTypeList1D==i);
 %                 shortPosList = startTrialTimePos:60; % this now becomes redundant -> commenting out. 
                 
@@ -217,6 +217,14 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             else
                                 text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
+                            
+                            if(length(trialPos)==9 || length(trialPos)==6)
+                                text(0.35,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.2,0.9,'n = ','Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            else
+                                text(0.15,0.9,'n = ','Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            end
                             hold(plotH_deltaPowerVsTime,'on');
                         case 2
                             %                         disp('Traialtype: Invalid');
@@ -230,6 +238,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             else
                                 text(0.55,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
+                            text(0.45,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                         case 3
                             %                         disp('Trailtype: Constant');
                             trialPos     = Third_catTrialPos;
@@ -242,9 +251,17 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                             else
                                 text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
+                            text(0.6,0.9,num2str(length(trialPos)),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             %                     otherwise
+                        case 4
+                            validTrialPos = [First_catTrialPos,Second_catTrialPos,Third_catTrialPos];
+                            sortValidTrialPos = sort(validTrialPos); 
+                            plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(sortValidTrialPos,:),1),'color',[0 0 0]);
+                    
+                           
                     end
                     
+%                
                     hold(plotH_deltaPowerVsTime,'on');
                     % Update the axis names
                     
@@ -263,8 +280,8 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             end
             
             %%%%%%%%%%% Calculate and Report the p value between valid and invalid calucula%%%%
-            [h,pval1] = ttest2(EX_mean_deltaPowerVsTimeList_valid,EX_mean_deltaPowerVsTimeList_invalid,'Alpha',0.05,'Tail','right','Vartype','unequal');
-            SubPValTemp  = pval1;
+%             [h,pval1] = ttest2(EX_mean_deltaPowerVsTimeList_valid,EX_mean_deltaPowerVsTimeList_invalid,'Alpha',0.05,'Tail','right','Vartype','unequal');
+%             SubPValTemp  = pval1;
             
             %         text(0.6,0.9,['p<10^{' ceil(log10(pval1)) '}' ],'color',[0 0 0],'fontsize',10,'fontweight','bold','normalized','parent',plotH_deltaPowerVsTime);
             %         if pval1<0.01
@@ -274,15 +291,15 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
             %             text(0.6,0.9,['p = ' phVal],'Color',[1 0.2695 0],'fontsize',fontSizeVal+2,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
             %         end
             
-            if subInd < 7
-                disp(pval1);
-                pval_pow = ceil(log10(pval1))-1;
-                pval_ini = pval1*10^abs(pval_pow);                
-                text(0.47,0.9,['p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
-            else
-                phVal = num2str(pval1,'%.3f');
-                text(0.57,0.9,['p = ' phVal],'Color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
-            end
+%             if subInd < 7
+%                 disp(pval1);
+%                 pval_pow = ceil(log10(pval1))-1;
+%                 pval_ini = pval1*10^abs(pval_pow);                
+%                 text(0.47,0.9,['p = ' num2str(pval_ini,'%.2f') '\times' '10^{' num2str(pval_pow) '}'],'color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+%             else
+%                 phVal = num2str(pval1,'%.3f');
+%                 text(0.57,0.9,['p = ' phVal],'Color',[0 0 0],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+%             end
             
             %         disp(pval1);
             %         s1 = num2str(pval1,'%.3f'); s2 = ','; s3 = num2str(h);
@@ -311,5 +328,6 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
 %     if subInd ==6
 %         legend([h(1) h(2) h(3)],{'Valid trial','Invalid trial','Constant trial',},'Orientation','horizontal','Box','on','FontSize',10,'Units','Normalized','Location','northeast');
 %     end
-%                         
+%    
+test = 10;
 end
