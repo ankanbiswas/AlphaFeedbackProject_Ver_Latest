@@ -45,7 +45,10 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
         plotH_deltaPowerVsTime = PlotH.deltaPowerVsTime;
     end
     
-    colorNames      = 'rgb';
+    colorNames{1}      = rgb('Lime');
+    colorNames{2}      = rgb('Navy');
+    colorNames{3}      = rgb('DimGray');
+    
     typeNameList{1} ='Valid';
     typeNameList{2} ='Invalid';
     typeNameList{3} ='Constant';
@@ -162,7 +165,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                     % Second: Trials preceded by invalid or constant(0) trial types.
                     % Third:  Trials preceeded by more than one valid trials.
                 
-                [First_catTrialPos,Second_catTrialPos,Third_catTrialPos] = biofeedbackValidSeparateTrialPos(NewRelevantTrialPos,0);                
+                [First_catTrialPos,Second_catTrialPos, Third_catTrialPos] = biofeedbackValidSeparateTrialPos(NewRelevantTrialPos,0);                
                   
                 % Now would check whether the sorting is right or not::::
                 % Done -> Its right only. 
@@ -174,7 +177,7 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%           
             % Modify here to generate separate data matrix for delta power according to Trial types
 %             h=[];
-            for i=3:-1:1 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
+            for i=1:1:4 % Trial Type:  Valid: 1, Invalid: 2, Constant: 3;
                 %             trialPos = find(trialTypeList1D==i);
 %                 shortPosList = startTrialTimePos:60; % this now becomes redundant -> commenting out. 
                 
@@ -207,63 +210,79 @@ function [PlotH,colorNames,meanEyeOpenPowerList,...
                         case 1
                             %                         disp('Trialtype: Valid');
                             trialPos     = First_catTrialPos;
-                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',[colorNames{i}]);
                             deltaPowerVsTimeList_valid      = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_valid = mean(deltaPowerVsTimeList_valid,1);
                             EX_mean_deltaPowerVsTimeList_valid = mean_deltaPowerVsTimeList_valid(timePosAnalysis);
                             %                         text(plotH_deltaPowerVsTime,30,1.6,num2str(mean(EX_mean_deltaPowerVsTimeList_valid)),'Color','red','FontSize',8);
                             if subInd == 1 || subInd == 4|| subInd == 5|| subInd == 2 || subInd == 9 || subInd == 17 || subInd == 21 
-                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_valid),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
                             
-                            if(length(trialPos)==9 || length(trialPos)==6)
-                                text(0.35,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
-                                text(0.2,0.9,'n = ','Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            if(length(trialPos)==7 || length(trialPos)==6 || length(trialPos)==5 )
+                                text(0.35,0.9,strcat(num2str(length(trialPos)),';'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.2,0.9,'n = ','Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.15,0.9,'n = ','Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
-                                text(0.3,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.15,0.9,'n = ','Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.3,0.9,strcat(num2str(length(trialPos)),';'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
                             hold(plotH_deltaPowerVsTime,'on');
                         case 2
                             %                         disp('Traialtype: Invalid');
                             trialPos     = Second_catTrialPos;
-                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',[colorNames{i}]);
                             deltaPowerVsTimeList_invalid      = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_invalid = mean(deltaPowerVsTimeList_invalid,1);
                             EX_mean_deltaPowerVsTimeList_invalid = mean_deltaPowerVsTimeList_invalid(timePosAnalysis);
                             if subInd == 3 || subInd == 8|| subInd == 12
-                                text(0.57,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.57,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.55,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.55,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_invalid),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
-                            text(0.45,0.9,strcat(num2str(length(trialPos)),';'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            text(0.45,0.9,strcat(num2str(length(trialPos)),';'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                         case 3
                             %                         disp('Trailtype: Constant');
                             trialPos     = Third_catTrialPos;
-                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',colorNames(i));
+                            h(i)= plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(trialPos,:),1),'color',[colorNames{i}]);
                             deltaPowerVsTimeList_constant = deltaPowerVsTimeList(trialPos,:);
                             mean_deltaPowerVsTimeList_constant = mean(deltaPowerVsTimeList_constant,1);
                             EX_mean_deltaPowerVsTimeList_constant = mean_deltaPowerVsTimeList_constant(timePosAnalysis);
                             if subInd == 1 || subInd == 4|| subInd == 5|| subInd == 2 || subInd == 9 || subInd == 17 || subInd == 21 
-                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             else
-                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                                text(0.8,0.12,num2str(mean(EX_mean_deltaPowerVsTimeList_constant),'%.2f'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             end
-                            text(0.6,0.9,num2str(length(trialPos)),'Color',colorNames(i),'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            text(0.6,0.9,strcat(num2str(length(trialPos)),';'),'Color',[colorNames{i}],'fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
                             %                     otherwise
+                        case 4
+                            validTrialPos = [First_catTrialPos,Second_catTrialPos,Third_catTrialPos];
+                            sortValidTrialPos = sort(validTrialPos); 
+                            plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(sortValidTrialPos,:),1),'color','r');
+                            
+                            deltaPowerVsTimeList_ValidAll = deltaPowerVsTimeList(sortValidTrialPos,:);
+                            mean_deltaPowerVsTimeList_ValidAll = mean(deltaPowerVsTimeList_ValidAll,1);
+                            EX_mean_deltaPowerVsTimeList_ValidAll = mean_deltaPowerVsTimeList_ValidAll(timePosAnalysis);
+                            if subInd == 6  
+                                text(0.8,0.27,num2str(mean(EX_mean_deltaPowerVsTimeList_ValidAll),'%.2f'),'Color','r','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            elseif subInd == 9 || subInd 
+                                text(0.8,0.5,num2str(mean(EX_mean_deltaPowerVsTimeList_ValidAll),'%.2f'),'Color','r','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            else
+                                text(0.8,0.25,num2str(mean(EX_mean_deltaPowerVsTimeList_ValidAll),'%.2f'),'Color','r','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);
+                            end
+                            
+                            text(0.7,0.9,num2str(length(sortValidTrialPos)),'Color','r','fontsize',fontSizeVal,'fontweight','bold','unit','normalized','parent',plotH_deltaPowerVsTime);   
+                           
                     end
                     
-                    validTrialPos = [First_catTrialPos,Second_catTrialPos,Third_catTrialPos];
-                    sortValidTrialPos = sort(validTrialPos); 
-                    plot(plotH_deltaPowerVsTime,analysisData.timeValsTF,mean(deltaPowerVsTimeList(sortValidTrialPos,:),1),'color',colorNames(i));
+%                
                     hold(plotH_deltaPowerVsTime,'on');
                     % Update the axis names
                     
                     % Bar Plot
-                    %                 bar(analysisPlotHandles.barPlot,i,mean(deltaPower),colorNames(i));
-                    %                 errorbar(analysisPlotHandles.barPlot,i,mean(deltaPower),std(deltaPower)/sqrt(length(deltaPower)),'color',colorNames(i));
+                    %                 bar(analysisPlotHandles.barPlot,i,mean(deltaPower),[colorNames{i}]);
+                    %                 errorbar(analysisPlotHandles.barPlot,i,mean(deltaPower),std(deltaPower)/sqrt(length(deltaPower)),'color',[colorNames{i}]);
                     %                 disp(mean(deltaPower));
                     
                     

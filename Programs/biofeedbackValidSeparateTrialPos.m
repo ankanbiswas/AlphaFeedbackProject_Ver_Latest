@@ -2,7 +2,7 @@
 % Purpose, given a trial sequence which consist of two different trial types
 % It would separate out the positions of those trialtypes
 
-function [First_catTrialPos,Second_catTrialPos, Third_catTrialPos] = biofeedbackValidSeparateTrialPos(a,d)
+function [Second_catTrialPos,First_catTrialPos, Third_catTrialPos] = biofeedbackValidSeparateTrialPos(a,d)
     % Input 1: Takes arrays containing 1's and 0's 
     % Input 2: Display Flag
     % Output: Positions of the trialtypes defined
@@ -17,12 +17,13 @@ function [First_catTrialPos,Second_catTrialPos, Third_catTrialPos] = biofeedback
 % a = [0 0 1 0  0 1 1 1 0 0 1 0 0];
 
 % Defining trialtypes:
-% First:  Trials preceded  by valid(1) trials
-% Second: Trials preceded by invalid or constant(0) trial types.
+
+% First:  Trials preceded by invalid or constant(0) trial types.
+% Second: Trials preceded  by valid(1) trials
 % Third:  Trials preceeded by more than one valid trials
 
-First_catTrialPos  = [];     % defining the first catagory of trialpositions
-Second_catTrialPos = [];     % defining the second catagory of trialpositions
+Second_catTrialPos  = [];     % defining the first catagory of trialpositions
+First_catTrialPos = [];     % defining the second catagory of trialpositions
 Third_catTrialPos  = [];     % defining the third catagory of trialpositions
 
 %% following code section would take each valid trials preceeded by a valid trial
@@ -34,17 +35,17 @@ for i= 2:length(a)
         if a(tempTrialPos-1) == 1
             % taking all the trails positions which has a preceeding
             % 1(valid trials)
-            First_catTrialPos = [First_catTrialPos,tempTrialPos];
+            Second_catTrialPos = [Second_catTrialPos,tempTrialPos];
         elseif a(tempTrialPos-1) == 0
             % taking all the trails positions which has a preceeding
             % 0(constant or invalid trials)
-            Second_catTrialPos = [Second_catTrialPos,tempTrialPos];
+            First_catTrialPos = [First_catTrialPos,tempTrialPos];
         end
     end
 end
 
-Fourth_catTrialPos =  First_catTrialPos(1);
-rev_firstTrials = fliplr(First_catTrialPos);
+Fourth_catTrialPos =  Second_catTrialPos(1);
+rev_firstTrials = fliplr(Second_catTrialPos);
 for i = 1:(length(rev_firstTrials)-1)
     if (rev_firstTrials(i)-rev_firstTrials(i+1))>1
         temp_Fourth_catTrialPos = rev_firstTrials(i);
@@ -55,11 +56,11 @@ end
 Pos_FourthTrial = [];
 for i= 1:length(Fourth_catTrialPos)
     tempElement = Fourth_catTrialPos(i);
-    tempPositions = find(First_catTrialPos==tempElement);
+    tempPositions = find(Second_catTrialPos==tempElement);
     Pos_FourthTrial = [Pos_FourthTrial tempPositions];
 end
     
-Fifth_catTrialPos = First_catTrialPos;
+Fifth_catTrialPos = Second_catTrialPos;
 Fifth_catTrialPos(Pos_FourthTrial)=[];
 
 
@@ -84,26 +85,38 @@ Fifth_catTrialPos(Pos_FourthTrial)=[];
 %         end
 %     end
 % end
-First_catTrialPos = sort(Fourth_catTrialPos);
+Second_catTrialPos = sort(Fourth_catTrialPos);
 Third_catTrialPos = sort(Fifth_catTrialPos);
 
 if a(1) == 1
-   if aFrom12 == 0
-       Second_catTrialPos = [Second_catTrialPos,1];
+   if aFrom12(1) == 0
+       First_catTrialPos = [First_catTrialPos,1];
    else
        if a(2)==0
-           First_catTrialPos = [First_catTrialPos, 1];
+           Second_catTrialPos = [Second_catTrialPos, 1];
         else
-           First_catTrialPos(First_catTrialPos==2) = [];
-           Third_catTrialPos = [Third_catTrialPo,2];
-           Third_catTrialPos = sort(Third_catTrialPos);
-       end
+           Second_catTrialPos(Second_catTrialPos==2) = [];
+           Second_catTrialPos = [Second_catTrialPos, 1];
+           Third_catTrialPos = [Third_catTrialPos,2];
+        end
    end
 end
 
+% First_catTrialPos = 12+First_catTrialPos;
+% Second_catTrialPos = 12+Second_catTrialPos;
+% Third_catTrialPos = 12+ Third_catTrialPos;
+
+Second_catTrialPos = 12+Second_catTrialPos;
+First_catTrialPos = 12+First_catTrialPos;
+Third_catTrialPos = 12+ Third_catTrialPos;
 
 %% Display the result if the flag is "ON": 
 if d==1
     disp(a);
-    disp(First_catTrialPos); disp(Second_catTrialPos); disp(Third_catTrialPos);
+    conc_allTrials = [Second_catTrialPos First_catTrialPos Third_catTrialPos];
+    conc_allTrials = sort(conc_allTrials);
+    indicesA = find(a==1);
+    check_a_allTrials = ismember(indicesA,conc_allTraials);
+    indicesA(find(check_a_allTrials==0))
+    disp(Second_catTrialPos); disp(First_catTrialPos); disp(Third_catTrialPos);
 end

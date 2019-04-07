@@ -18,7 +18,7 @@ haxfigure_2 = axes('parent',hfigure_2);
 % hfigure_2.PaperPosition = [0 0 hfigure_2.PaperSize];
 hfigure_2.Color = [1 1 1];
 fontsize = 10;
-startTrialTimePos = 1; % default one
+startTrialTimePos = 13; % default one
 
 % subjectNames = {'ABA','AJ','DB','DD','HS',...
 %                 'SB','SG','SS','SSH','SKS', ...
