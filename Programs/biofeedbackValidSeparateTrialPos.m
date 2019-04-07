@@ -6,8 +6,8 @@ function [First_catTrialPos,Second_catTrialPos, Third_catTrialPos] = biofeedback
     % Input 1: Takes arrays containing 1's and 0's 
     % Input 2: Display Flag
     % Output: Positions of the trialtypes defined
-    
-    
+ aFrom12 = a;
+ a = a(2:49);
 %% Defining parameters
 % c = [ones(1,5), zeros(1,5)]; % defining a vector of zeros and ones
 % b = randperm(size(c,2));     % creating randomize array positions
@@ -43,28 +43,64 @@ for i= 2:length(a)
     end
 end
 
+Fourth_catTrialPos =  First_catTrialPos(1);
+rev_firstTrials = fliplr(First_catTrialPos);
+for i = 1:(length(rev_firstTrials)-1)
+    if (rev_firstTrials(i)-rev_firstTrials(i+1))>1
+        temp_Fourth_catTrialPos = rev_firstTrials(i);
+        Fourth_catTrialPos = [Fourth_catTrialPos temp_Fourth_catTrialPos];
+    end
+end
+
+Pos_FourthTrial = [];
+for i= 1:length(Fourth_catTrialPos)
+    tempElement = Fourth_catTrialPos(i);
+    tempPositions = find(First_catTrialPos==tempElement);
+    Pos_FourthTrial = [Pos_FourthTrial tempPositions];
+end
+    
+Fifth_catTrialPos = First_catTrialPos;
+Fifth_catTrialPos(Pos_FourthTrial)=[];
+
 
 %% Following code section would take (one) valid trials in case it is preceeded by a Multiple valid trial
 
-for i= 1:(length(a))
-    tempTrialPos=i;
-    if i<length(a)
-        diff = a(tempTrialPos)- a(tempTrialPos+1);
-        if i>1   
-            revDiff = a(tempTrialPos)- a(tempTrialPos-1);
-        end; 
-    else
-        revDiff = a(tempTrialPos)- a(tempTrialPos-1);
-    end
-    
-    if i<length(a) &&  i>1 && diff==1 && revDiff==0
-        Third_catTrialPos = [Third_catTrialPos,tempTrialPos];
-    elseif i==length(a)
-        if revDiff==0 && a(i)==1
-            Third_catTrialPos = [Third_catTrialPos,tempTrialPos];
-        end
-    end
+% for i= 1:(length(a))
+%     tempTrialPos=i;
+%     if i<length(a)
+%         diff = a(tempTrialPos)- a(tempTrialPos+1);
+%         if i>1   
+%             revDiff = a(tempTrialPos)- a(tempTrialPos-1);
+%         end; 
+%     else
+%         revDiff = a(tempTrialPos)- a(tempTrialPos-1);
+%     end
+%     
+%     if i<length(a) &&  i>1 && diff==1 && revDiff==0
+%         Third_catTrialPos = [Third_catTrialPos,tempTrialPos];
+%     elseif i==length(a)
+%         if revDiff==0 && a(i)==1
+%             Third_catTrialPos = [Third_catTrialPos,tempTrialPos];
+%         end
+%     end
+% end
+First_catTrialPos = sort(Fourth_catTrialPos);
+Third_catTrialPos = sort(Fifth_catTrialPos);
+
+if a(1) == 1
+   if aFrom12 == 0
+       Second_catTrialPos = [Second_catTrialPos,1];
+   else
+       if a(2)==0
+           First_catTrialPos = [First_catTrialPos, 1];
+        else
+           First_catTrialPos(First_catTrialPos==2) = [];
+           Third_catTrialPos = [Third_catTrialPo,2];
+           Third_catTrialPos = sort(Third_catTrialPos);
+       end
+   end
 end
+
 
 %% Display the result if the flag is "ON": 
 if d==1
